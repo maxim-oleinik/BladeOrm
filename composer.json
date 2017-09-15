@@ -1,0 +1,13 @@
+{
+  "name": "bladeorm",
+  "require": {
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "BladeOrm\\": "src/",
+      "BladeOrm\\Test\\": "test/"
+    }
+  }
+}
