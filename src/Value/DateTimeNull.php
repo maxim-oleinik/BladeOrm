@@ -1,7 +1,7 @@
 <?php namespace BladeOrm\Value;
 
 
-class DateTimeNull extends \DateTime implements NullValueInterface
+class DateTimeNull extends DateTime implements NullValueInterface
 {
     public function format($format) {}
     public function getTimestamp() {}
