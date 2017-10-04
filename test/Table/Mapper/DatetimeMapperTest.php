@@ -1,6 +1,7 @@
 <?php namespace BladeOrm\Test\Table\Mapper;
 
 use BladeOrm\Table\Mapper\DatetimeMapper;
+use BladeOrm\Value\DateTimeNull;
 
 require_once __DIR__ . '/BaseMapperTestCase.php';
 

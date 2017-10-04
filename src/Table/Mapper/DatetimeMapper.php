@@ -1,5 +1,8 @@
 <?php namespace BladeOrm\Table\Mapper;
 
+use BladeOrm\Value\DateTime;
+use BladeOrm\Value\DateTimeNull;
+
 
 /**
  * @see \BladeOrm\Test\Table\Mapper\DatetimeMapperTest
@@ -25,7 +28,7 @@ class DatetimeMapper implements MapperInterface
 
     /**
      * @param string $value
-     * @return \Carbon\Carbon|DateTimeNull
+     * @return DateTime|DateTimeNull
      */
     public function fromDb(&$value)
     {
@@ -33,7 +36,7 @@ class DatetimeMapper implements MapperInterface
             return new DateTimeNull;
 
         } else {
-            return new \Carbon\Carbon($value);
+            return new DateTime($value);
         }
     }
 
