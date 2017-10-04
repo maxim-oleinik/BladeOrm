@@ -82,7 +82,7 @@ class Model
      *   'field' => ['trim', ['ThisModelClass', '_set_col_callable']],
      *   'field' => [\DateTime::class], // Может принимать значения только указанного класса
      *
-     * все типы, см в  @see Model::_set_transform
+     * все типы, см в  @see _set_transform()
      */
     protected $transformers = [];
 
@@ -148,7 +148,7 @@ class Model
             if ($this->isNew()) {
                 return null;
             }
-            throw new \InvalidArgumentException(get_class($this) . '::' . __FUNCTION__ . ": Field `{$field}` not found");
+            throw new \InvalidArgumentException($this->_error_mess("Field `{$field}` not found"));
         }
 
         return $this->values[$field];
@@ -182,7 +182,7 @@ class Model
     {
         // Исключение, если есть геттер
         if ($this->forceGetters && !empty($this->forceGetters[$field])) {
-            throw new \InvalidArgumentException(__METHOD__ . ": Forbidden! Use getter `{$this->forceGetters[$field]}`");
+            throw new \InvalidArgumentException($this->_error_mess("Forbidden! Use getter `{$this->forceGetters[$field]}`"));
         }
 
         return $this->_get_value($field);
@@ -199,7 +199,7 @@ class Model
     {
         // Исключение, если запрещена магия
         if (!$this->allowGetterMagic) {
-            throw new \InvalidArgumentException(__METHOD__ . ": Magic is not allowed!");
+            throw new \InvalidArgumentException($this->_error_mess("Magic is not allowed!"));
         }
 
         return $this->get($field);
@@ -256,7 +256,7 @@ class Model
         if ($this->forceSetters && array_key_exists($field, $this->forceSetters)) {
             $method = $this->forceSetters[$field];
             if (!$method) {
-                throw new \RuntimeException(__METHOD__.": set('{$field}') is forbidden");
+                throw new \RuntimeException($this->_error_mess("set('{$field}') is forbidden"));
             }
             $this->$method($value);
             return array_key_exists($field, $this->modifiedValuesNew);
@@ -380,7 +380,7 @@ class Model
 
                     case 'datetime':
                         if (!$value instanceof \DateTime) {
-                            throw new \InvalidArgumentException(__METHOD__.": Expected DateTime for field `{$field}`");
+                            throw new \InvalidArgumentException($this->_error_mess("Expected DateTime for field `{$field}`"));
                         }
                         break;
 
@@ -396,7 +396,7 @@ class Model
 
                     case 'array':
                         if ( !is_array($value)) {
-                            throw new \InvalidArgumentException(__METHOD__ . ": Expected array for `{$field}``");
+                            throw new \InvalidArgumentException($this->_error_mess("Expected array for `{$field}``"));
                         }
                         break;
 
@@ -406,12 +406,12 @@ class Model
 
                     case class_exists($type):
                         if (!$value instanceof $type) {
-                            throw new \InvalidArgumentException(__METHOD__.": Expected {$type} for field `{$field}`");
+                            throw new \InvalidArgumentException($this->_error_mess(": Expected {$type} for field `{$field}`"));
                         }
                         break;
 
                     default:
-                        throw new \InvalidArgumentException(__METHOD__ . ": Unknown transformer `{$type}`");
+                        throw new \InvalidArgumentException($this->_error_mess("Unknown transformer `{$type}`"));
                         break;
                 }
 
@@ -438,7 +438,7 @@ class Model
      */
     public function __set($field, $value)
     {
-        throw new \RuntimeException(__METHOD__ . ": Deprecated!");
+        throw new \RuntimeException($this->_error_mess("Deprecated!"));
     }
 
     /**
@@ -664,6 +664,16 @@ class Model
             $this->modifiedValuesNew = [];
         }
 
+    }
+
+
+    /**
+     * @param $message
+     * @return string
+     */
+    private function _error_mess($message)
+    {
+        return sprintf('%s::%s: %s', get_class($this), debug_backtrace()[1]['function'], $message);
     }
 
 }
