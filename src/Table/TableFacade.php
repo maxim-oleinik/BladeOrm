@@ -1,8 +1,28 @@
 <?php namespace BladeOrm\Table;
 
-
 class TableFacade
 {
+    /**
+     * @var TablesRepository
+     */
+    private static $repo;
+
+    /**
+     * @return TablesRepository
+     */
+    public static function getRepo()
+    {
+        return self::$repo;
+    }
+
+    /**
+     * @param mixed $repo
+     */
+    public static function setRepo(TablesRepository $repo)
+    {
+        self::$repo = $repo;
+    }
+
     /**
      * @param $model
      * @return \BladeOrm\Table
@@ -13,7 +33,7 @@ class TableFacade
             $model = get_class($model);
         }
 
-        $repo = \App::getTablesRepo();
+        $repo = self::getRepo();
         if ($repo->has($model)) {
             return $repo->table($model);
         }
