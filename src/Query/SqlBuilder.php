@@ -2,12 +2,17 @@
 
 
 /**
- * @see \Test\SqlBuilderTest
+ * @see \BladeOrm\Test\Query\SqlBuilderTest
  */
 class SqlBuilder
 {
     const WHERE_AND = 'AND';
     const WHERE_OR  = 'OR';
+
+    /**
+     * @var callable
+     */
+    protected static $escapeMethod;
 
     private $tableName;
     private $fromAlias;
@@ -34,6 +39,10 @@ class SqlBuilder
      */
     public function __construct($label = null)
     {
+        if (!self::$escapeMethod) {
+            throw new \RuntimeException(__CLASS__.": Escape method not set");
+        }
+
         $this->label = $label;
     }
 
@@ -50,6 +59,16 @@ class SqlBuilder
         return new $class($label);
     }
 
+
+    /**
+     * Установить метод экранирования
+     *
+     * @param callable $escapeMethod
+     */
+    public static function setEscapeMethod(callable $escapeMethod)
+    {
+        self::$escapeMethod = $escapeMethod;
+    }
 
     /**
      * LABEL
@@ -281,7 +300,7 @@ class SqlBuilder
         } else if (count($args) > 1) {
             $values = $args;
             array_shift($values);
-            $values = array_map(['Db', 'escape_string'], $values);
+            $values = array_map(self::$escapeMethod, $values);
             $cond = vsprintf($cond, $values);
         }
 
@@ -306,7 +325,7 @@ class SqlBuilder
             throw new \InvalidArgumentException(__METHOD__.": Expected not emplty list");
         }
 
-        $values = array_map(['Db', 'escape_string'], $values);
+        $values = array_map(self::$escapeMethod, $values);
         $this->andWhere(sprintf("%s%s IN ('%s')", $field, $equals?'':' NOT', implode("','", $values)));
         return $this;
     }
@@ -568,7 +587,8 @@ class SqlBuilder
         } else if (is_bool($val)) {
             $val = (int)$val;
         } else {
-            $val = sprintf("'%s'", \Db::escape_string($val));
+            $method = self::$escapeMethod;
+            $val = sprintf("'%s'", $method($val));
         }
         return $val;
     }
