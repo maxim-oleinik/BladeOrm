@@ -75,7 +75,7 @@ abstract class Table
     // ------------------------------------------------------------------------
 
     /**
-     * @var \Database
+     * @var DbAdapterInterface
      */
     private $db;
 
@@ -118,13 +118,10 @@ abstract class Table
     /**
      * Конструктор
      *
-     * @param \Database $db
+     * @param DbAdapterInterface  $db
      */
-    public function __construct(\Database $db = null)
+    public function __construct(DbAdapterInterface $db)
     {
-        if (!$db) {
-            $db = D();
-        }
         $this->db = $db;
     }
 
@@ -171,7 +168,7 @@ abstract class Table
 
 
     /**
-     * @return \Database
+     * @return DbAdapterInterface
      */
     public function getAdapter()
     {
@@ -513,7 +510,7 @@ abstract class Table
         $sql = $this->sql()->insert()
             ->values($mappedValues)
             ->returning(implode(',', (array)$this->getPrimaryKey()));
-        $result = $this->getAdapter()->setFetchMode(\PDO::FETCH_ASSOC)->selectRow($sql);
+        $result = $this->getAdapter()->selectRow($sql);
         foreach ($result as $key => $value) {
             $item->push($key, $value);
         }
@@ -630,7 +627,7 @@ abstract class Table
     public function softDeleteOnViolation(Model $item)
     {
         $pkName  = $this->getPrimaryKey();
-        D()->execute(sprintf('
+        $this->getAdapter()->execute(sprintf('
             do $$ begin
                 delete from %1$s where %2$s=%3$d;
             exception when foreign_key_violation then

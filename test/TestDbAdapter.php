@@ -1,15 +1,13 @@
 <?php namespace BladeOrm\Test;
 
+use BladeOrm\DbAdapterInterface;
 
-class TestDbAdapter
+
+class TestDbAdapter implements DbAdapterInterface
 {
     public $lastQuery;
     public $returnRows = [];
 
-
-    public function __construct($databaseType = null)
-    {
-    }
 
     private function _simulate_query($query)
     {
@@ -20,10 +18,6 @@ class TestDbAdapter
         return $result;
     }
 
-
-    public function begin() {}
-    public function commit() {}
-    public function rollback() {}
 
     public function selectValue($query, $args = null) {
         return $this->_simulate_query($query);
@@ -41,18 +35,8 @@ class TestDbAdapter
         return $this->_simulate_query($query);
     }
 
-    public function selectKeyValue($query, $args = null) {
-        return $this->_simulate_query($query);
-    }
-
-    public function select($query, $args = null) {
-        return $this->_simulate_query($query);
-    }
-
     public function execute($query, $args = null) {
         return $this->_simulate_query($query);
     }
-
-    public function getInsertId() {}
 
 }

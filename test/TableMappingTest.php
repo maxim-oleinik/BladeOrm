@@ -87,7 +87,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMapper()
     {
-        $table = new TestTable();
+        $table = new TestTable(new TestDbAdapter);
         $mapper = $table->getMapper('pg_bool');
         $this->assertInstanceOf(\BladeOrm\Table\Mapper\PgBoolMapper::class, $mapper);
         $this->assertSame($mapper, $table->getMapper('pg_bool'));
@@ -100,7 +100,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomMapperClass()
     {
-        $table = new TestTable();
+        $table = new TestTable(new TestDbAdapter);
 
         $values = $table->mapToDb(['col_upper' => 'text']);
         $this->assertEquals(['col_upper'=>'TEXT'], $values);
@@ -115,7 +115,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMakeModel()
     {
-        $table = new TestTable();
+        $table = new TestTable(new TestDbAdapter);
         $m = $table->makeModel(['col_upper' => 'text']);
         $this->assertInstanceOf(\BladeOrm\Test\TableMappingTestModel::class, $m);
         $this->assertFalse($m->isNew(), 'Таблица всегда создает НЕ новый объект');
@@ -128,7 +128,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultiColumnMapper()
     {
-        $table = new TestTable();
+        $table = new TestTable(new TestDbAdapter);
 
         // Чтение
         $m = $table->makeModel($input = ['name' => 'text', 'code'=>'21']);

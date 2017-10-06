@@ -1,5 +1,6 @@
 <?php namespace BladeOrm\Table;
 
+use BladeOrm\DbAdapterInterface;
 use BladeOrm\Table;
 
 
@@ -21,9 +22,9 @@ class TableFactory
     /**
      * Конструктор
      *
-     * @param \Database $db
+     * @param DbAdapterInterface $db
      */
-    public function __construct(\Database $db, callable $cacheFactory = null)
+    public function __construct(DbAdapterInterface $db, callable $cacheFactory = null)
     {
         $this->dbAdapter = $db;
         $this->cacheFactory = $cacheFactory;
