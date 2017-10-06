@@ -68,7 +68,7 @@ class TransformTest extends \PHPUnit_Framework_TestCase
     public function testDateMutator()
     {
         $m = new TestModelForTransformTest(['col_date' => $date = new \DateTime('tomorrow')]);
-        $this->assertEquals($date->format(DATE_DB_DATE), $m->col_date);
+        $this->assertEquals($date->format('Y-m-d'), $m->col_date);
 
         $m->set('col_date', $date = '2016-02-01');
         $this->assertEquals($date, $m->col_date);

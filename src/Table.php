@@ -47,12 +47,12 @@ abstract class Table
     /**
      * @var string - Класс Модели, который будет создавать при выборке данных
      */
-    protected $modelName;
+    protected $modelName = Model::class;
 
     /**
      * @var string - Класс Query
      */
-    protected $query;
+    protected $query = Query::class;
 
     /**
      * Поля доступные для INSERT/UPDATE
@@ -222,7 +222,10 @@ abstract class Table
      */
     public function getModelName()
     {
-        return $this->modelName;
+        if ($this->modelName) {
+            return $this->modelName;
+        }
+        throw new \RuntimeException(get_class($this).'::'.__FUNCTION__.": Model not set");
     }
 
     /**

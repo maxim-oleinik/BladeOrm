@@ -41,6 +41,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
     {
         $this->db = new TestDbAdapter;
         $this->table = new BaseQueryTestTable($this->db);
+        Table\CacheRepository::clear();
     }
 
     /**
@@ -80,11 +81,12 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         $this->db->returnRows = [['id'=>44], ['id'=>55]];
         $sql = $this->table->sql()->findListByPk($ids = [44,55]);
         $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('44','55')";
-        $this->assertEquals("/*".get_class($sql)."::findListByPk*/\n".$q, (string)$sql);
-        $this->table->findListByPk($ids);
+        $this->assertEquals("/*".get_class($sql)."::findListByPk*/\n".$q, (string)$sql, 'созданный SQL');
 
+        // Запрос
+        $this->table->findListByPk($ids);
         $label = get_class($this->table) . '::findListByPk';
-        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->lastQuery);
+        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->lastQuery, 'отправленный SQL');
 
         // Кеширование выборки
         $this->table->findListByPk([44, 77]);

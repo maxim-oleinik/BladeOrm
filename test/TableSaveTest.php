@@ -76,7 +76,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $db = $this->table->getAdapter();
         $db->returnRows = ['id' =>$id = 555];
         $this->table->insert($item);
-        $this->assertEquals($id, $item->getId(), 'Присвоен ID');
+        $this->assertEquals($id, $item->get('id'), 'Присвоен ID');
         $this->assertFalse($item->isNew(), 'Отмечен как сохранен');
 
         $this->assertSame("INSERT INTO test (code, name) VALUES ('Code', 'Name') RETURNING id", (string)$db->lastQuery);

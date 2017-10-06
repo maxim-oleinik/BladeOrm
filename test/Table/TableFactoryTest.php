@@ -62,10 +62,10 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(count($input), count($tables), 'Создали все таблицы');
 
-        $this->_assert_table($tables[0], TableFactoryTestTable::class, Item::class, Query::class);
+        $this->_assert_table($tables[0], TableFactoryTestTable::class, Model::class, Query::class);
         $this->_assert_table($tables[1], TableFactoryTestTable::class, TableFactoryTestModel::class, Query::class);
         $this->_assert_table($tables[2], TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class);
-        $this->_assert_table($tables[3], TableFactoryTestTable::class, Item::class, TableFactoryTestQuery::class);
+        $this->_assert_table($tables[3], TableFactoryTestTable::class, Model::class, TableFactoryTestQuery::class);
 
     }
 

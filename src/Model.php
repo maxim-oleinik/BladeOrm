@@ -386,7 +386,7 @@ class Model
 
                     case 'db_date':
                         if ($value instanceof \DateTime) {
-                            $value = $value->format(DATE_DB_DATE);
+                            $value = $value->format('Y-m-d');
                         }
                         break;
 
