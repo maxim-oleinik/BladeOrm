@@ -36,7 +36,7 @@ class PgArrayMapperTest extends BaseMapperTestCase
 EOT
              ],trim(
                  <<<'EOT'
-{"\\\\a\\"''"}
+{"\\a\"''"}
 EOT
              )],
             //[null,   '{}'],   // Исключение

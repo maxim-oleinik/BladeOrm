@@ -21,8 +21,8 @@ class PgHashMapperTest extends BaseMapperTestCase
         $planWrite = [
             [['a'=>1, 'b'=>'bb'], new \BladeOrm\Query\SqlFunc('\'"a"=>"1","b"=>"bb"\'')],
             [['a'=>null], new \BladeOrm\Query\SqlFunc('\'"a"=>NULL\'')],
-            [['a'=>'\'"a'], new \BladeOrm\Query\SqlFunc('\'"a"=>"\'\'\\\\"a"\'')],
-            [['a'=>'\\text\\'], new \BladeOrm\Query\SqlFunc('\'"a"=>"\\\\\\\\text\\\\\\\\"\'')],
+            [['a'=>'\'"a'], new \BladeOrm\Query\SqlFunc('\'"a"=>"\'\'\\"a"\'')],
+            [['a'=>'\\text\\'], new \BladeOrm\Query\SqlFunc('\'"a"=>"\\\\text\\\\"\'')],
             [[], new \BladeOrm\Query\SqlFunc('\'\'')],
             [null, new \BladeOrm\Query\SqlFunc('\'\'')],
         ];

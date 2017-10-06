@@ -21,7 +21,7 @@ class DaterangeMapperTest extends BaseMapperTestCase
         // Запись в Базу
         $planWrite = [
             [$dateRange = new DateRange(new \DateTime, new \DateTime('+1 day')),
-             $string = "[{$dateRange->getStart()->format(DATE_DB_DATE)}, {$dateRange->getEnd()->format(DATE_DB_DATE)}]"],
+             $string = "[{$dateRange->getStart()->format('Y-m-d')}, {$dateRange->getEnd()->format('Y-m-d')}]"],
             [null, null],
         ];
 

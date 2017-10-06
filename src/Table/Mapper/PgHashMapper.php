@@ -1,5 +1,7 @@
 <?php namespace BladeOrm\Table\Mapper;
 
+use BladeOrm\Query\SqlBuilder;
+
 
 /**
  * @see \BladeOrm\Test\Table\Mapper\PgHashMapperTest
@@ -28,8 +30,7 @@ class PgHashMapper implements MapperInterface
                 if (is_array($val)) {
                     $val = implode(',', $val);
                 }
-                // TODO Max: 15.09.17 - использовать коннект
-                $result[] = sprintf('"%s"=>"%s"', addcslashes($key, '\"'), \Db::escape_string(addcslashes($val, '\"')));
+                $result[] = sprintf('"%s"=>"%s"', addcslashes($key, '\"'), SqlBuilder::escape(addcslashes($val, '\"')));
             }
         }
         $value = new \BladeOrm\Query\SqlFunc("'" . implode(',', $result) . "'");

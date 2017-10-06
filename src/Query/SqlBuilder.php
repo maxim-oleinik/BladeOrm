@@ -70,6 +70,20 @@ class SqlBuilder
         self::$escapeMethod = $escapeMethod;
     }
 
+
+    /**
+     * Escape value
+     *
+     * @param  string $value
+     * @return string mixed
+     */
+    public static function escape($value)
+    {
+        $method = self::$escapeMethod;
+        return $method($value);
+    }
+
+
     /**
      * LABEL
      *
@@ -587,8 +601,7 @@ class SqlBuilder
         } else if (is_bool($val)) {
             $val = (int)$val;
         } else {
-            $method = self::$escapeMethod;
-            $val = sprintf("'%s'", $method($val));
+            $val = sprintf("'%s'", self::escape($val));
         }
         return $val;
     }

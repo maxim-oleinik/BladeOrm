@@ -22,8 +22,8 @@ class PgDaterangeMapper implements MapperInterface
 
         } else {
             return $value = sprintf("[%s, %s]",
-                $value->getStart()->format(DATE_DB_DATE),
-                $value->getEnd()->format(DATE_DB_DATE));
+                $value->getStart()->format('Y-m-d'),
+                $value->getEnd()->format('Y-m-d'));
         }
     }
 

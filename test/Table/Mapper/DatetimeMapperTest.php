@@ -20,14 +20,14 @@ class DatetimeMapperTest extends BaseMapperTestCase
 
         // Запись в Базу
         $planWrite = [
-            [$date = new \DateTime, $date->format(DATE_DB_DATETIME)],
+            [$date = new \DateTime, $date->format('Y-m-d H:i:s')],
             [null, null],
         ];
 
         // Чтение из базы
         $planRead = [
             [null,   new DateTimeNull],
-            [$date->format(DATE_DB_DATETIME), $date],
+            [$date->format('Y-m-d H:i:s'), $date],
         ];
 
         $this->_test_write_values($mapper, $planWrite);
