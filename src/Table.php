@@ -296,7 +296,7 @@ abstract class Table
             return current($items);
         } else {
             if ($exception) {
-                throw new ModelNotFoundException(get_class($this).'::'.__FUNCTION__.": ".$sql);
+                throw new ModelNotFoundException($this);
             }
             return false;
         }
