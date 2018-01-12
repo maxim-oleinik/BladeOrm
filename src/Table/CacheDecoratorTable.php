@@ -102,7 +102,7 @@ class CacheDecoratorTable
             return current($items);
         } else {
             if ($exception) {
-                throw new ModelNotFoundException(get_class($this->table) . '::' . __METHOD__ . ": " . $sql);
+                throw new ModelNotFoundException($this->table);
             }
             return false;
         }
