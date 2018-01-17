@@ -326,7 +326,7 @@ class SqlBuilder
         }
 
         $values = array_map(self::$escapeMethod, $values);
-        $this->andWhere(sprintf("%s%s IN ('%s')", $field, $equals?'':' NOT', implode("','", $values)));
+        $this->andWhere(sprintf("%s%s IN ('%s')", $field, $equals?'':' NOT', implode("', '", $values)));
         return $this;
     }
 

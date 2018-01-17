@@ -75,14 +75,14 @@ class SqlBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $sql = $this->_sql();
         $sql->andWhereIn('col', ['a', "'b"]);
-        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col IN ('a','''b')", (string)$sql);
+        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col IN ('a', '''b')", (string)$sql);
     }
 
     public function testWhereNotIn()
     {
         $sql = $this->_sql();
         $sql->andWhereNotIn('col', [1,2]);
-        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col NOT IN ('1','2')", (string)$sql);
+        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col NOT IN ('1', '2')", (string)$sql);
     }
 
     public function testWhereNotDeleted()
