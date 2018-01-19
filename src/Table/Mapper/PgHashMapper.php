@@ -47,7 +47,7 @@ class PgHashMapper implements MapperInterface
             $value = [];
 
         } else {
-            $value = str_replace(['=>'], [':'], $value);
+            $value = str_replace(['"=>NULL', '=>'], ['"=>null', ':'], $value);
             $value = array_map('stripslashes', json_decode("{{$value}}", true));
         }
 
