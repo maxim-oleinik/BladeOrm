@@ -240,9 +240,20 @@ class SqlBuilder
 
     public function count($fields = '*')
     {
-        return $this->select(sprintf('count(%s)', $fields));
+        return $this->select(sprintf('count(%s)', $fields))
+            ->orderBy(null);
     }
 
+    /**
+     * Вернуть 1, если найдены записи
+     *
+     * @return $this
+     */
+    public function exists()
+    {
+        return $this->select(1)
+            ->limit(1);
+    }
 
     /**
      * Подставить значение колонки с алиасом таблицы
