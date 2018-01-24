@@ -110,6 +110,15 @@ class CacheDecoratorTable
 
 
     /**
+     * @return \Database
+     */
+    public function getAdapter()
+    {
+        return $this->table->getAdapter();
+    }
+
+
+    /**
      * Поиск в кеше, если не находит - ищет в базе и сохраняет в кеш
      *
      * @param Query $sql
