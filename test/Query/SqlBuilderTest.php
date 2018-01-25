@@ -199,6 +199,23 @@ class SqlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(sprintf("INSERT INTO {$this->table} (%s) VALUES (23, 1.56, 'val''/*', 0, NULL)", implode(', ', array_keys($values))), (string)$sql);
     }
 
+    /**
+     * INSERT many
+     */
+    public function testInsertMany()
+    {
+        $sql = (new SqlBuilder())->insert($this->table)
+            ->batchMode()
+            ->values([[
+                'id' => 1,
+                'name' => 'name1',
+            ],[
+                'id' => 2,
+                'name' => 'name2',
+            ]]);
+        $this->assertEquals("INSERT INTO {$this->table} (id, name) VALUES (1, 'name1'), (2, 'name2')", (string)$sql);
+    }
+
 
     /**
      * INSERT RETURNING

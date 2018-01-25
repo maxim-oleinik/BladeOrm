@@ -26,6 +26,7 @@ class SqlBuilder
     private $limit;
     private $offset;
     private $isInsert = false;
+    private $batchMode = false;
     private $isUpdate = false;
     private $isDelete = false;
     private $returnig;
@@ -156,6 +157,19 @@ class SqlBuilder
         $this->values = $values;
         return $this;
     }
+
+    /**
+     * Многострочный режим (для INSERT)
+     *
+     * @param bool $enable
+     * @return $this
+     */
+    public function batchMode($enable = true)
+    {
+        $this->batchMode = (bool) $enable;
+        return $this;
+    }
+
 
     /**
      * @return array
@@ -507,12 +521,23 @@ class SqlBuilder
      */
     private function _to_insert()
     {
-        $values = [];
-        foreach ($this->values as $key => $val) {
-            $values[$key] = $this->_value($val);
+        if (!$this->batchMode) {
+            $values = [$this->values];
+        } else {
+            $values = $this->values;
+        }
+        $columns = array_keys(current($values));
+
+        $rows = [];
+        foreach ($values as $rowData) {
+            $row = [];
+            foreach ($rowData as $key => $val) {
+                $row[$key] = $this->_value($val);
+            }
+            $rows[] = implode(', ', $row);
         }
 
-        $sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $this->getTableName(), implode(', ', array_keys($values)), implode(', ', $values));
+        $sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $this->getTableName(), implode(', ', $columns), implode('), (', $rows));
 
         if ($this->returnig) {
             $sql .= ' RETURNING ' . $this->returnig;
