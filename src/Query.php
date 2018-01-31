@@ -206,4 +206,12 @@ class Query extends \BladeOrm\Query\SqlBuilder
     {
         return $this->finder->getAdapter()->selectValue($this);
     }
+
+    /**
+     * Выполнить запрос без возвращения данных
+     */
+    public function execute()
+    {
+        $this->finder->getAdapter()->execute($this);
+    }
 }
