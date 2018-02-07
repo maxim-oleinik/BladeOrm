@@ -51,10 +51,19 @@ class TablesRepository
      */
     public function tableForModel($modelClassName)
     {
+        $origName = $modelClassName;
         if (!$this->hasModel($modelClassName)) {
-            $modelClassName = get_parent_class($modelClassName);
-            if (!$this->hasModel($modelClassName)) {
-                throw new \InvalidArgumentException(__METHOD__ . ": table for model `{$modelClassName}` not registered");
+            $parents = class_parents($modelClassName);
+            $modelClassName = null;
+            if ($parents) {
+                foreach ($parents as $className) {
+                    if ($this->hasModel($className)) {
+                        $modelClassName = $className;
+                    }
+                }
+            }
+            if (!$modelClassName) {
+                throw new \InvalidArgumentException(__METHOD__ . ": table for model `{$origName}` not registered");
             }
         }
         return $this->tablesForModels[$modelClassName];
