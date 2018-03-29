@@ -36,7 +36,7 @@ class TablesRepository
     /**
      * @param Table $table
      */
-    public function set(Table $table)
+    public function set($table)
     {
         $this->tables[get_class($table)] = $table;
         if (Model::class != $table->getModelName()) {
