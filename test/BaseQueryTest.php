@@ -80,7 +80,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
     {
         $this->db->returnRows = [['id'=>44], ['id'=>55]];
         $sql = $this->table->sql()->findListByPk($ids = [44,55]);
-        $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('44','55')";
+        $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('44', '55')";
         $this->assertEquals("/*".get_class($sql)."::findListByPk*/\n".$q, (string)$sql, 'созданный SQL');
 
         // Запрос
