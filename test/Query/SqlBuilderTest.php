@@ -75,14 +75,14 @@ class SqlBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $sql = $this->_sql();
         $sql->andWhereIn('col', ['a', "'b"]);
-        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col IN ('a','''b')", (string)$sql);
+        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col IN ('a', '''b')", (string)$sql);
     }
 
     public function testWhereNotIn()
     {
         $sql = $this->_sql();
         $sql->andWhereNotIn('col', [1,2]);
-        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col NOT IN ('1','2')", (string)$sql);
+        $this->assertEquals("SELECT *\nFROM {$this->table}\nWHERE col NOT IN ('1', '2')", (string)$sql);
     }
 
     public function testWhereNotDeleted()
@@ -197,6 +197,23 @@ class SqlBuilderTest extends \PHPUnit_Framework_TestCase
                 'col_null' => null,
             ]);
         $this->assertEquals(sprintf("INSERT INTO {$this->table} (%s) VALUES (23, 1.56, 'val''/*', 0, NULL)", implode(', ', array_keys($values))), (string)$sql);
+    }
+
+    /**
+     * INSERT many
+     */
+    public function testInsertMany()
+    {
+        $sql = (new SqlBuilder())->insert($this->table)
+            ->batchMode()
+            ->values([[
+                'id' => 1,
+                'name' => 'name1',
+            ],[
+                'id' => 2,
+                'name' => 'name2',
+            ]]);
+        $this->assertEquals("INSERT INTO {$this->table} (id, name) VALUES (1, 'name1'), (2, 'name2')", (string)$sql);
     }
 
 

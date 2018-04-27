@@ -26,6 +26,7 @@ class SqlBuilder
     private $limit;
     private $offset;
     private $isInsert = false;
+    private $batchMode = false;
     private $isUpdate = false;
     private $isDelete = false;
     private $returnig;
@@ -172,6 +173,19 @@ class SqlBuilder
     }
 
     /**
+     * Многострочный режим (для INSERT)
+     *
+     * @param bool $enable
+     * @return $this
+     */
+    public function batchMode($enable = true)
+    {
+        $this->batchMode = (bool) $enable;
+        return $this;
+    }
+
+
+    /**
      * @return array
      */
     public function getValues()
@@ -254,9 +268,20 @@ class SqlBuilder
 
     public function count($fields = '*')
     {
-        return $this->select(sprintf('count(%s)', $fields));
+        return $this->select(sprintf('count(%s)', $fields))
+            ->orderBy(null);
     }
 
+    /**
+     * Вернуть 1, если найдены записи
+     *
+     * @return $this
+     */
+    public function exists()
+    {
+        return $this->select(1)
+            ->limit(1);
+    }
 
     /**
      * Подставить значение колонки с алиасом таблицы
@@ -340,7 +365,7 @@ class SqlBuilder
         }
 
         $values = array_map(self::$escapeMethod, $values);
-        $this->andWhere(sprintf("%s%s IN ('%s')", $field, $equals?'':' NOT', implode("','", $values)));
+        $this->andWhere(sprintf("%s%s IN ('%s')", $field, $equals?'':' NOT', implode("', '", $values)));
         return $this;
     }
 
@@ -510,12 +535,23 @@ class SqlBuilder
      */
     private function _to_insert()
     {
-        $values = [];
-        foreach ($this->values as $key => $val) {
-            $values[$key] = $this->_value($val);
+        if (!$this->batchMode) {
+            $values = [$this->values];
+        } else {
+            $values = $this->values;
+        }
+        $columns = array_keys(current($values));
+
+        $rows = [];
+        foreach ($values as $rowData) {
+            $row = [];
+            foreach ($rowData as $key => $val) {
+                $row[$key] = $this->_value($val);
+            }
+            $rows[] = implode(', ', $row);
         }
 
-        $sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $this->getTableName(), implode(', ', array_keys($values)), implode(', ', $values));
+        $sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $this->getTableName(), implode(', ', $columns), implode('), (', $rows));
 
         if ($this->returnig) {
             $sql .= ' RETURNING ' . $this->returnig;

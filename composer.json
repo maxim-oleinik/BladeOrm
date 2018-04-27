@@ -1,5 +1,12 @@
 {
-  "name": "bladeorm",
+  "name": "blade/orm",
+  "type": "library",
+  "description": "PHP ORM library",
+  "license": "MIT",
+  "authors": [{
+    "name": "Maxim Oleinik",
+    "email": "maxim.oleinik@gmail.com"
+  }],
   "require": {
   },
   "require-dev": {
@@ -7,7 +14,11 @@
   },
   "autoload": {
     "psr-4": {
-      "BladeOrm\\": "src/",
+      "BladeOrm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "BladeOrm\\Test\\": "test/"
     }
   }

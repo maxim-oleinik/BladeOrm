@@ -147,7 +147,8 @@ class Query extends \BladeOrm\Query\SqlBuilder
     /**
      * Получить список объектов у Таблицы
      *
-     * @return Model[]
+     * @param string $indexBy - Проиндексировать массив по указанному полю
+     * @return \BladeOrm\Model[]
      */
     public function fetchList($indexBy = null)
     {
@@ -157,11 +158,60 @@ class Query extends \BladeOrm\Query\SqlBuilder
     /**
      * Получить один объект у Таблицы
      *
-     * @return false|Model
+     * @param  bool $exception
+     * @return false|\BladeOrm\Model
      */
     public function fetchOne($exception = false)
     {
         return $this->finder->findOne($this, $exception);
     }
 
+
+    /**
+     * @return array - Всю выборку, для SELECT * FROM ...
+     */
+    public function fetchAll()
+    {
+        return $this->finder->getAdapter()->selectList($this);
+    }
+
+    /**
+     * @return array - Ключ-значение, для SELECT id, name FROM ...
+     */
+    public function fetchKeyValue()
+    {
+        return $this->finder->getAdapter()->selectKeyValue($this);
+    }
+
+    /**
+     * @return array - Всю строку, для SELECT * FROM ... LIMIT 1
+     */
+    public function fetchRow()
+    {
+        return $this->finder->getAdapter()->selectRow($this);
+    }
+
+    /**
+     * @return array - Всю колонку ввиде массива, для SELECT name FROM ...
+     */
+    public function fetchColumn()
+    {
+        return $this->finder->getAdapter()->selectColumn($this);
+    }
+
+    /**
+     * @return mixed - Единственное значение для SELECT id FROM ... LIMIT 1
+     */
+    public function fetchValue()
+    {
+        return $this->finder->getAdapter()->selectValue($this);
+    }
+
+    /**
+     * Выполнить запрос без возвращения данных
+     */
+    public function execute()
+    {
+        $this->finder->getAdapter()->execute($this);
+    }
 }

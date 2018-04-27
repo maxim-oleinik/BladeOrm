@@ -296,7 +296,7 @@ abstract class Table
             return current($items);
         } else {
             if ($exception) {
-                throw new ModelNotFoundException(get_class($this).'::'.__FUNCTION__.": ".$sql);
+                throw new ModelNotFoundException($this);
             }
             return false;
         }
@@ -421,36 +421,30 @@ abstract class Table
     /**
      * Разбить выборку на части
      *
-     * @param int                  $pageSize
-     * @param \BladeOrm\Query\SqlBuilder $sql
-     * @param callable             $handler
-     * @param string               $indexBy
-     * @return array
-     * @throws \DatabaseException
+     * @param int        $pageSize
+     * @param SqlBuilder $sql
+     * @param callable   $handler
+     * @param string     $indexBy
      */
     public function chunk($pageSize, SqlBuilder $sql, callable $handler, $indexBy = null)
     {
-        $result = [];
+        $this->getAdapter()->chunk($pageSize, $sql, function ($rows) use ($handler, $indexBy) {
+            $models = [];
+            foreach ($rows as $row) {
+                /** @var Model $model */
+                $model = $this->makeModel((array)$row);
 
-        $sqlCount = clone $sql;
-        $sqlCount->select('count(*)')->orderBy(null);
-        $rowsCount = $this->getAdapter()->selectValue($sqlCount);
+                if ($indexBy) {
+                    $models[$model->get($indexBy)] = $model;
+                } else {
+                    $models[] = $model;
+                }
+            }
 
-        if ($rowsCount) {
-            $itemsLeft = $rowsCount;
-            $page   = 1;
-            $offset = 0;
-            do {
-                $sql->limit($pageSize, $offset);
-                $page++;
-                $offset = ($page - 1) * $pageSize;
-                $itemsLeft -= $pageSize;
-
-                $handler($this->findList($sql, $indexBy));
-            } while ($itemsLeft > 0);
-        }
-
-        return $result;
+            if ($models) {
+                $handler($models);
+            }
+        });
     }
 
 
