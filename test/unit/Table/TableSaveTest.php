@@ -14,7 +14,7 @@ class Item extends Model
 class BaseTableSaveTestTable extends Table
 {
     const TABLE = 'test';
-    protected $availableFields = ['code', 'name'];
+    protected $availableFields = ['code', 'name', 'deleted_at'];
 }
 
 class BaseTableSaveEventListener implements EventListenerInterface {
@@ -59,6 +59,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $this->table->addListener(Table::EVENT_POST_INSERT, new BaseTableSaveEventListener('post_insert', $this->eventLogger));
         $this->table->addListener(Table::EVENT_PRE_UPDATE,  new BaseTableSaveEventListener('pre_update', $this->eventLogger));
         $this->table->addListener(Table::EVENT_POST_UPDATE, new BaseTableSaveEventListener('post_update', $this->eventLogger));
+        $this->table->addListener(Table::EVENT_POST_DELETE, new BaseTableSaveEventListener('post_delete', $this->eventLogger));
     }
 
 
@@ -109,4 +110,46 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
     }
 
+
+    /**
+     * Soft Delete
+     */
+    public function testSoftDelete()
+    {
+        $item = $this->table->makeModel([
+            'id'         => 556,
+            'deleted_at' => null,
+        ]);
+
+        $db = $this->table->getAdapter();
+        $this->table->softDelete($item);
+
+        $this->assertSame(sprintf("UPDATE test SET deleted_at='%s'\nWHERE id='556'", date('Y-m-d H:i:s')), (string)$db->lastQuery);
+        $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
+    }
+
+
+    /**
+     * DELETE
+     */
+    public function testDelete()
+    {
+        $item = $this->table->makeModel([
+            'id'   => 556,
+            'code' => 'Code',
+            'name' => 'Name',
+        ]);
+
+        $db = $this->table->getAdapter();
+
+        // Указали Модель
+        $this->table->delete($item);
+        $this->assertSame("DELETE FROM test\nWHERE id='556'", (string)$db->lastQuery);
+        $this->assertEquals('post_delete ', $this->eventLogger->log);
+
+        // SotfDeleteOnVoilation
+        $this->table->softDeleteOnViolation($item);
+        $this->assertContains("exception when foreign_key_violation then", (string)$db->lastQuery);
+        $this->assertEquals('post_delete post_delete ', $this->eventLogger->log, 'в логе должен еще раз отметить удаление');
+    }
 }

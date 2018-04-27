@@ -584,22 +584,19 @@ abstract class Table
     /**
      * DELETE
      *
-     * @param Model|int $modelOrPk
+     * @param Model $item
      */
-    public function delete($modelOrPk)
+    public function delete(Model $item)
     {
-        if ($modelOrPk instanceof Model) {
-            $id = $modelOrPk->get($this->getPrimaryKey());
-        } else {
-            $id = (string) $modelOrPk;
-        }
-
+        $id = $item->get($this->getPrimaryKey());
         if (!$id) {
             throw new \InvalidArgumentException(get_class($this)."::".__FUNCTION__.": ID is empty");
         }
 
         $sql = $this->sql(__METHOD__)->findOneByPk($id)->delete();
         $this->getAdapter()->execute($sql);
+
+        $this->_notify(self::EVENT_POST_DELETE, $item);
     }
 
 
@@ -610,7 +607,7 @@ abstract class Table
      */
     public function softDelete(Model $item)
     {
-        $item->set('deleted_at', date(DATE_DB_DATETIME, TIME));
+        $item->set('deleted_at', date('Y-m-d H:i:s'));
         $this->update($item);
     }
 
@@ -631,6 +628,8 @@ abstract class Table
                 update %1$s set deleted_at=now() where %2$s=%3$d;
             end $$
         ', $this->getTableName(), $pkName, $item->get($pkName)));
+
+        $this->_notify(self::EVENT_POST_DELETE, $item);
     }
 
 
