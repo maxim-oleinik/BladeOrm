@@ -4,7 +4,7 @@
  * Запрос для работы с Таблицей
  *   - наследники сохраняют конкретные выборки для работы с базой
  */
-class Query extends \BladeOrm\Query\SqlBuilder
+class Query extends \Blade\Database\Sql\SqlBuilder
 {
     /**
      * @var Table

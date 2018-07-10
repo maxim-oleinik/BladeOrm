@@ -4,7 +4,7 @@ use BladeOrm\Exception\ModelNotFoundException;
 use BladeOrm\Table\Column;
 use BladeOrm\Table\Mapper\MapperInterface;
 use BladeOrm\Table\CacheRepository;
-use BladeOrm\Query\SqlBuilder;
+use Blade\Database\Sql\SqlBuilder;
 
 
 /**
@@ -282,7 +282,7 @@ abstract class Table
      * Find ONE
      * @throws ModelNotFoundException
      *
-     * @param \BladeOrm\Query\SqlBuilder $sql
+     * @param \Blade\Database\Sql\SqlBuilder $sql
      * @param bool                 $exception
      *
      * @return false|Model

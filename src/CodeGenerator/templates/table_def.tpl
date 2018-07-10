@@ -1,7 +1,7 @@
 
 /**
- * @method false|%MODEL%   findOne(\BladeOrm\Query\SqlBuilder $sql, $exception = false)
- * @method %MODEL%[] findList(\BladeOrm\Query\SqlBuilder $sql, $indexBy = null)
+ * @method false|%MODEL%   findOne(\Blade\Database\Sql\SqlBuilder $sql, $exception = false)
+ * @method %MODEL%[] findList(\Blade\Database\Sql\SqlBuilder $sql, $indexBy = null)
  * @method false|%MODEL%   findOneByPk($id, $exception = true)
  * @method %MODEL%[] findListByPk(array $ids)
  * @method %MODEL%   refresh(%MODEL% $item)

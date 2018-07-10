@@ -1,6 +1,6 @@
 <?php namespace BladeOrm\Table\Mapper;
 
-use BladeOrm\Query\SqlBuilder;
+use Blade\Database\Sql\SqlBuilder;
 
 
 /**
@@ -10,7 +10,7 @@ class PgHashMapper implements MapperInterface
 {
     /**
      * @param mixed $value
-     * @return \BladeOrm\Query\SqlFunc
+     * @return \Blade\Database\Sql\SqlFunc
      */
     public function toDb($value)
     {
@@ -33,7 +33,7 @@ class PgHashMapper implements MapperInterface
                 $result[] = sprintf('"%s"=>"%s"', addcslashes($key, '\"'), SqlBuilder::escape(addcslashes($val, '\"')));
             }
         }
-        $value = new \BladeOrm\Query\SqlFunc("'" . implode(',', $result) . "'");
+        $value = new \Blade\Database\Sql\SqlFunc("'" . implode(',', $result) . "'");
 
         return $value;
     }
