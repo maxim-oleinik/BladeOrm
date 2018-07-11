@@ -1,5 +1,6 @@
 <?php namespace BladeOrm\Test;
 
+use Blade\Database\DbAdapter;
 use BladeOrm\Model;
 use BladeOrm\Table;
 use BladeOrm\EventListenerInterface;
@@ -52,7 +53,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->eventLogger = new BaseTableSaveEventLogger;
-        $this->table = new BaseTableSaveTestTable(new TestDbAdapter());
+        $this->table = new BaseTableSaveTestTable(new DbAdapter(new TestDbConnection()));
         $this->table->addListener(Table::EVENT_PRE_SAVE,    new BaseTableSaveEventListener('pre_save', $this->eventLogger));
         $this->table->addListener(Table::EVENT_POST_SAVE,   new BaseTableSaveEventListener('post_save', $this->eventLogger));
         $this->table->addListener(Table::EVENT_PRE_INSERT,  new BaseTableSaveEventListener('pre_insert', $this->eventLogger));
@@ -75,12 +76,12 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $db = $this->table->getAdapter();
-        $db->returnRows = ['id' =>$id = 555];
+        $db->getConnection()->returnRows = [['id' =>$id = 555]];
         $this->table->insert($item);
         $this->assertEquals($id, $item->get('id'), 'Присвоен ID');
         $this->assertFalse($item->isNew(), 'Отмечен как сохранен');
 
-        $this->assertSame("INSERT INTO test (code, name) VALUES ('Code', 'Name') RETURNING id", (string)$db->lastQuery);
+        $this->assertSame("INSERT INTO test (code, name) VALUES ('Code', 'Name') RETURNING id", (string)$db->getConnection()->lastQuery);
 
         $this->assertEquals('pre_insert pre_save post_insert post_save ', $this->eventLogger->log);
     }
@@ -105,7 +106,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($item->isNew(), 'Отмечен как сохранен');
         $this->assertSame(['unknown'=>22], $item->getValuesUpdated(), 'Обнулены isModified');
 
-        $this->assertSame("UPDATE test SET code='New Code'\nWHERE id='556'", (string)$db->lastQuery);
+        $this->assertSame("UPDATE test SET code='New Code'\nWHERE id='556'", (string)$db->getConnection()->lastQuery);
 
         $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
     }
@@ -124,7 +125,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $db = $this->table->getAdapter();
         $this->table->softDelete($item);
 
-        $this->assertSame(sprintf("UPDATE test SET deleted_at='%s'\nWHERE id='556'", date('Y-m-d H:i:s')), (string)$db->lastQuery);
+        $this->assertSame(sprintf("UPDATE test SET deleted_at='%s'\nWHERE id='556'", date('Y-m-d H:i:s')), (string)$db->getConnection()->lastQuery);
         $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
     }
 
@@ -144,12 +145,12 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
 
         // Указали Модель
         $this->table->delete($item);
-        $this->assertSame("DELETE FROM test\nWHERE id='556'", (string)$db->lastQuery);
+        $this->assertSame("DELETE FROM test\nWHERE id='556'", (string)$db->getConnection()->lastQuery);
         $this->assertEquals('post_delete ', $this->eventLogger->log);
 
         // SotfDeleteOnVoilation
         $this->table->softDeleteOnViolation($item);
-        $this->assertContains("exception when foreign_key_violation then", (string)$db->lastQuery);
+        $this->assertContains("exception when foreign_key_violation then", (string)$db->getConnection()->lastQuery);
         $this->assertEquals('post_delete post_delete ', $this->eventLogger->log, 'в логе должен еще раз отметить удаление');
     }
 }

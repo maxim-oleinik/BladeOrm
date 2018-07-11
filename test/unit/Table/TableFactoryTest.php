@@ -1,10 +1,11 @@
 <?php namespace BladeOrm\Test\Table;
 
+use Blade\Database\DbAdapter;
 use BladeOrm\Model;
 use BladeOrm\Query;
 use BladeOrm\Table;
 use BladeOrm\Table\TableFactory;
-use BladeOrm\Test\TestDbAdapter;
+use BladeOrm\Test\TestDbConnection;
 
 
 class TableFactoryTestQuery extends Query {}
@@ -26,7 +27,7 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = new TableFactory($db = new TestDbAdapter());
+        $this->factory = new TableFactory($db = new DbAdapter(new TestDbConnection()));
     }
 
     /**

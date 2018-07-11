@@ -1,5 +1,6 @@
 <?php namespace BladeOrm\Test;
 
+use Blade\Database\DbAdapter;
 use BladeOrm\Query;
 use BladeOrm\Table;
 
@@ -30,7 +31,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
     private $table;
 
     /**
-     * @var TestDbAdapter
+     * @var DbAdapter
      */
     private $db;
 
@@ -39,7 +40,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->db = new TestDbAdapter;
+        $this->db = new DbAdapter(new TestDbConnection);
         $this->table = new BaseQueryTestTable($this->db);
         Table\CacheRepository::clear();
     }
@@ -69,7 +70,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         $this->table->findOneByPk($id, false);
 
         $label = get_class($this->table) . '::findOneByPk';
-        $this->assertEquals("/*{$label}*/\n".$q."\nLIMIT 1", (string)$this->db->lastQuery);
+        $this->assertEquals("/*{$label}*/\n".$q."\nLIMIT 1", (string)$this->db->getConnection()->lastQuery);
     }
 
 
@@ -78,7 +79,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindListByPk()
     {
-        $this->db->returnRows = [['id'=>44], ['id'=>55]];
+        $this->db->getConnection()->returnRows = [['id'=>44], ['id'=>55]];
         $sql = $this->table->sql()->findListByPk($ids = [44,55]);
         $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('44', '55')";
         $this->assertEquals("/*".get_class($sql)."::findListByPk*/\n".$q, (string)$sql, 'созданный SQL');
@@ -86,12 +87,12 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         // Запрос
         $this->table->findListByPk($ids);
         $label = get_class($this->table) . '::findListByPk';
-        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->lastQuery, 'отправленный SQL');
+        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->getConnection()->lastQuery, 'отправленный SQL');
 
         // Кеширование выборки
         $this->table->findListByPk([44, 77]);
         $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('77')";
-        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->lastQuery, '44 - уже не выбирается из базы');
+        $this->assertEquals("/*{$label}*/\n".$q, (string)$this->db->getConnection()->lastQuery, '44 - уже не выбирается из базы');
     }
 
     /**

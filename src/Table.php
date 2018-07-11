@@ -1,11 +1,11 @@
 <?php namespace BladeOrm;
 
+use Blade\Database\DbAdapter;
 use BladeOrm\Exception\ModelNotFoundException;
 use BladeOrm\Table\Column;
 use BladeOrm\Table\Mapper\MapperInterface;
 use BladeOrm\Table\CacheRepository;
 use Blade\Database\Sql\SqlBuilder;
-
 
 /**
  * Отвечает за сохранение и получение Моделей из БД
@@ -75,7 +75,7 @@ abstract class Table
     // ------------------------------------------------------------------------
 
     /**
-     * @var DbAdapterInterface
+     * @var DbAdapter
      */
     private $db;
 
@@ -118,9 +118,9 @@ abstract class Table
     /**
      * Конструктор
      *
-     * @param DbAdapterInterface  $db
+     * @param DbAdapter $db
      */
-    public function __construct(DbAdapterInterface $db)
+    public function __construct(DbAdapter $db)
     {
         $this->db = $db;
     }
@@ -168,7 +168,7 @@ abstract class Table
 
 
     /**
-     * @return DbAdapterInterface
+     * @return DbAdapter
      */
     public function getAdapter()
     {

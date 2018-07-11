@@ -1,8 +1,7 @@
 <?php namespace BladeOrm\Table;
 
-use BladeOrm\DbAdapterInterface;
+use Blade\Database\DbAdapter;
 use BladeOrm\Table;
-
 
 /**
  * @see \BladeOrm\Test\Table\TableFactoryTest
@@ -10,7 +9,7 @@ use BladeOrm\Table;
 class TableFactory
 {
     /**
-     * @var \Database
+     * @var DbAdapter
      */
     private $dbAdapter;
 
@@ -22,9 +21,9 @@ class TableFactory
     /**
      * Конструктор
      *
-     * @param DbAdapterInterface $db
+     * @param DbAdapter $db
      */
-    public function __construct(DbAdapterInterface $db, callable $cacheFactory = null)
+    public function __construct(DbAdapter $db, callable $cacheFactory = null)
     {
         $this->dbAdapter = $db;
         $this->cacheFactory = $cacheFactory;
@@ -71,5 +70,4 @@ class TableFactory
         }
         return $result;
     }
-
 }

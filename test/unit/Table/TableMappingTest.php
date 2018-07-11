@@ -1,5 +1,6 @@
 <?php namespace BladeOrm\Test;
 
+use Blade\Database\DbAdapter;
 use BladeOrm\Model;
 use BladeOrm\Table;
 use BladeOrm\Table\Mapper\MapperInterface;
@@ -87,7 +88,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMapper()
     {
-        $table = new TestTable(new TestDbAdapter);
+        $table = new TestTable(new DbAdapter(new TestDbConnection()));
         $mapper = $table->getMapper('pg_bool');
         $this->assertInstanceOf(\BladeOrm\Table\Mapper\PgBoolMapper::class, $mapper);
         $this->assertSame($mapper, $table->getMapper('pg_bool'));
@@ -100,7 +101,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomMapperClass()
     {
-        $table = new TestTable(new TestDbAdapter);
+        $table = new TestTable(new DbAdapter(new TestDbConnection()));
 
         $values = $table->mapToDb(['col_upper' => 'text']);
         $this->assertEquals(['col_upper'=>'TEXT'], $values);
@@ -115,7 +116,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMakeModel()
     {
-        $table = new TestTable(new TestDbAdapter);
+        $table = new TestTable(new DbAdapter(new TestDbConnection()));
         $m = $table->makeModel(['col_upper' => 'text']);
         $this->assertInstanceOf(\BladeOrm\Test\TableMappingTestModel::class, $m);
         $this->assertFalse($m->isNew(), 'Таблица всегда создает НЕ новый объект');
@@ -128,7 +129,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultiColumnMapper()
     {
-        $table = new TestTable(new TestDbAdapter);
+        $table = new TestTable(new DbAdapter(new TestDbConnection()));
 
         // Чтение
         $m = $table->makeModel($input = ['name' => 'text', 'code'=>'21']);
