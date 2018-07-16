@@ -264,7 +264,7 @@ abstract class Table
     {
         $result = [];
 
-        $rows = $this->getAdapter()->selectList($sql);
+        $rows = $this->getAdapter()->selectAll($sql);
         foreach ($rows as $row) {
             /** @var Model $item */
             $item = $this->makeModel((array)$row);

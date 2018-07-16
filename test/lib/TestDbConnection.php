@@ -1,5 +1,7 @@
 <?php namespace BladeOrm\Test;
 
+use Blade\Database\Sql\SqlBuilder;
+
 class TestDbConnection implements \Blade\Database\DbConnectionInterface
 {
     public $lastQuery;
@@ -15,14 +17,20 @@ class TestDbConnection implements \Blade\Database\DbConnectionInterface
         return $result;
     }
 
-    public function execute($sql, $bindings = [])
+    public function execute($sql, $bindings = []): int
     {
         $this->lastQuery = $sql;
+        return 1;
     }
 
-    public function select($sql, $bindings = [])
+    public function each($sql, $bindings = [], callable $callback)
     {
-        return $this->_simulate_query($sql);
+        $rows = $this->_simulate_query($sql);
+        if ($rows) {
+            foreach ($rows as $row) {
+                $callback($row);
+            }
+        }
     }
 
     public function beginTransaction()
@@ -38,5 +46,10 @@ class TestDbConnection implements \Blade\Database\DbConnectionInterface
     public function rollBack()
     {
         $this->_simulate_query('ROLLBACK');
+    }
+
+    public function escape($value): string
+    {
+        return SqlBuilder::escape($value);
     }
 }

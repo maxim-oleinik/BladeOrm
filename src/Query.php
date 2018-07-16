@@ -172,7 +172,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      */
     public function fetchAll()
     {
-        return $this->finder->getAdapter()->selectList($this);
+        return $this->finder->getAdapter()->selectAll($this);
     }
 
     /**
