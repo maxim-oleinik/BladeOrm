@@ -210,8 +210,8 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     /**
      * Выполнить запрос без возвращения данных
      */
-    public function execute()
+    public function execute(): int
     {
-        $this->finder->getAdapter()->execute($this);
+        return $this->finder->getAdapter()->execute($this);
     }
 }
