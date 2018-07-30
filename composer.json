@@ -9,7 +9,7 @@
   }],
   "require": {
     "php": ">=7.0",
-    "blade/database": "^0.2.0"
+    "blade/database": "^0.2.0@dev"
   },
   "repositories": {
     "blade/database": {

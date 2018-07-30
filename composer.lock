@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e7412b3685549d4b5a1c3cf97c97503",
+    "content-hash": "9762466ca2340517a3fd7fd80d92f123",
     "packages": [
         {
             "name": "blade/database",
-            "version": "0.2.0",
+            "version": "0.2.1-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maxim-oleinik/blade-database.git",
-                "reference": "755441b6829e18ea7058fd82e5651a779813d9cf"
+                "reference": "22ce6a7014f9ffa6072d163f3c28f627dd8c3835"
             },
             "require": {
                 "php": ">=7.0"
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "PHP Database interface library",
-            "time": "2018-07-16T08:19:36+00:00"
+            "time": "2018-07-30T07:51:18+00:00"
         }
     ],
     "packages-dev": [
@@ -1319,7 +1319,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.12",
+            "version": "v3.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -1429,7 +1429,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "blade/database": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
