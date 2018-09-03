@@ -29,5 +29,9 @@
     "psr-4": {
       "BladeOrm\\Test\\": "test/lib"
     }
+  },
+
+  "config": {
+    "sort-packages": true
   }
 }
