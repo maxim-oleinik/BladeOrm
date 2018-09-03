@@ -42,5 +42,4 @@ abstract class BaseMapperTestCase extends \PHPUnit_Framework_TestCase
             $this->$method($expected, $writeResult, 'READ: ' . var_export($data, true));
         }
     }
-
 }

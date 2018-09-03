@@ -5,8 +5,7 @@ use BladeOrm\Model;
 use BladeOrm\Query;
 use BladeOrm\Table;
 use BladeOrm\Table\TableFactory;
-use BladeOrm\Test\TestDbConnection;
-
+use Blade\Database\Connection\TestStubDbConnection;
 
 class TableFactoryTestQuery extends Query {}
 class TableFactoryTestModel extends Model {}
@@ -27,7 +26,7 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = new TableFactory($db = new DbAdapter(new TestDbConnection()));
+        $this->factory = new TableFactory($db = new DbAdapter(new TestStubDbConnection()));
     }
 
     /**

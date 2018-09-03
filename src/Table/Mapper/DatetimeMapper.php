@@ -18,7 +18,7 @@ class DatetimeMapper implements MapperInterface
         if (!$value) {
             return null;
 
-        } else if (!$value instanceof \DateTime) {
+        } elseif (!$value instanceof \DateTime) {
             throw new \InvalidArgumentException(get_class($this) . '::' . __FUNCTION__ . ": Expected DateTime");
 
         } else {

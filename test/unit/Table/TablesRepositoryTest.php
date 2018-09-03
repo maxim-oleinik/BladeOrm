@@ -4,7 +4,7 @@ use Blade\Database\DbAdapter;
 use BladeOrm\Model;
 use BladeOrm\Table\TablesRepository;
 use BladeOrm\Table;
-use BladeOrm\Test\TestDbConnection;
+use Blade\Database\Connection\TestStubDbConnection;
 
 class TablesRepositoryTestModel extends Model {}
 class TablesRepositoryTestChildModel extends TablesRepositoryTestModel {}
@@ -33,7 +33,7 @@ class TablesRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleAdd()
     {
-        $table = new TablesRepositoryTestTable(new DbAdapter(new TestDbConnection()));
+        $table = new TablesRepositoryTestTable(new DbAdapter(new TestStubDbConnection()));
         $this->repo->set($table);
 
         $this->assertSame($table, $this->repo->table(TablesRepositoryTestTable::class));
@@ -45,7 +45,7 @@ class TablesRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDoNotRegisterDefaultModel()
     {
-        $table = new TablesRepositoryTestTable(new DbAdapter(new TestDbConnection()));
+        $table = new TablesRepositoryTestTable(new DbAdapter(new TestStubDbConnection()));
         $this->repo->set($table);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -59,7 +59,7 @@ class TablesRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterModel()
     {
-        $table = new TablesRepositoryTestTable(new DbAdapter(new TestDbConnection()));
+        $table = new TablesRepositoryTestTable(new DbAdapter(new TestStubDbConnection()));
         $table->setModelName(TablesRepositoryTestModel::class);
         $this->repo->set($table);
 

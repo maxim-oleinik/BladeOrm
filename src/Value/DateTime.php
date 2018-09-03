@@ -1,6 +1,5 @@
 <?php namespace BladeOrm\Value;
 
-
 class DateTime extends \DateTime
 {
     public function __toString()
