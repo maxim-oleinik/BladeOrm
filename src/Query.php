@@ -61,7 +61,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     }
 
     /**
-     * @param $minutes
+     * @param int $minutes
      * @return $this
      */
     public function withCache($minutes)
@@ -142,7 +142,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      * @param string $indexBy - Проиндексировать массив по указанному полю
      * @return \BladeOrm\Model[]
      */
-    public function fetchList($indexBy = null)
+    public function fetchModelsList($indexBy = null)
     {
         return $this->finder->findList($this, $indexBy);
     }
@@ -153,7 +153,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      * @param  bool $exception
      * @return false|\BladeOrm\Model
      */
-    public function fetchOne($exception = false)
+    public function fetchModel($exception = false)
     {
         return $this->finder->findOne($this, $exception);
     }

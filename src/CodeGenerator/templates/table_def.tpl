@@ -14,7 +14,7 @@
 class %TABLE_ALIAS% extends %TABLE% {}
 
 /**
-* @method false|%MODEL% fetchOne($exception = false)
-* @method %MODEL%[] fetchList($indexBy = null)
+* @method false|%MODEL% fetchModel($exception = false)
+* @method %MODEL%[] fetchModelsList($indexBy = null)
 */
 class %QUERY_ALIAS% extends %QUERY% {}
