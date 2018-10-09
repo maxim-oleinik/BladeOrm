@@ -151,7 +151,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
 
         // Указали Модель
         $this->table->delete($item);
-        $this->assertSame("DELETE FROM test\nWHERE id='556'", $this->conn->log[0]);
+        $this->assertSame("DELETE FROM test\nWHERE id IN ('556')", $this->conn->log[0]);
         $this->assertEquals('post_delete ', $this->eventLogger->log);
 
         // SotfDeleteOnVoilation

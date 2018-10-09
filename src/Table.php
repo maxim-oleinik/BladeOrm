@@ -315,7 +315,7 @@ abstract class Table
         $id = (string)$id;
         if ($id) {
             return CacheRepository::item($this->getTableName(), $id, function() use ($id, $exception) {
-                $sql = $this->sql(get_class($this).'::findOneByPk')->findOneByPk($id);
+                $sql = $this->sql(get_class($this).'::findOneByPk')->filterByPk($id);
                 return $this->findOne($sql, $exception);
             });
 
@@ -354,7 +354,7 @@ abstract class Table
         }
 
         if ($searchIds) {
-            $sql = $this->sql(get_class($this).'::'.__FUNCTION__)->findListByPk($searchIds);
+            $sql = $this->sql(get_class($this).'::'.__FUNCTION__)->filterByPk($searchIds);
             $searchFound = $this->findList($sql, $this->getPrimaryKey());
             if ($searchFound) {
                 $result += $searchFound;
@@ -593,7 +593,7 @@ abstract class Table
             throw new \InvalidArgumentException(get_class($this)."::".__FUNCTION__.": ID is empty");
         }
 
-        $sql = $this->sql(__METHOD__)->findOneByPk($id)->delete();
+        $sql = $this->sql(__METHOD__)->filterByPk($id)->delete();
         $this->getAdapter()->execute($sql);
 
         $this->_notify(self::EVENT_POST_DELETE, $item);

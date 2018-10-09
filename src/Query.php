@@ -85,35 +85,27 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     /**
      * findOneByPk
      *
-     * @param  int $id
+     * @param  int|int[] $ids
      * @return $this
      */
-    public function findOneByPk($id)
+    public function filterByPk($ids)
     {
+        $origin = $ids;
+        $ids = (array) $ids;
+
         $pk = $this->getTable()->getPrimaryKey();
         // Если в базе PK INT, а мы передаем текст, получим SQL-ошибку, надо привести к типу, который заявлен в таблице
-        $id = $this->getTable()->mapToDb([$pk => $id])[$pk];
+        $ids = array_filter(array_map(function ($value) use ($pk) {
+            return $this->getTable()->mapToDb([$pk => $value])[$pk];
+        }, $ids));
 
-        return $this
-            ->setLabel(get_class($this).'::'.__FUNCTION__, true)
-            ->andWhere($this->col($pk)."='%s'", $id);
-    }
-
-
-    /**
-     * findListByPk
-     *
-     * @param int[] $ids
-     * @return $this
-     */
-    public function findListByPk(array $ids)
-    {
         if (!$ids) {
-            throw new \InvalidArgumentException(__METHOD__.": Expected not empty list");
+            throw new \InvalidArgumentException(__METHOD__.": Expected PK value or array, got: " . var_export($origin, true));
         }
+
         return $this
             ->setLabel(get_class($this).'::'.__FUNCTION__, true)
-            ->andWhereIn($this->col($this->getTable()->getPrimaryKey()), $ids);
+            ->andWhereIn($pk, $ids);
     }
 
 

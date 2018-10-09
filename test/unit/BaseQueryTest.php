@@ -69,9 +69,9 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindOneByPk()
     {
-        $sql = $this->table->sql()->findOneByPk($id=55);
-        $q = "SELECT *\nFROM table AS t\nWHERE t.id='{$id}'";
-        $this->assertEquals("/*".get_class($sql)."::findOneByPk*/\n".$q, (string)$sql);
+        $sql = $this->table->sql()->filterByPk($id = 55);
+        $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('{$id}')";
+        $this->assertEquals("/*".get_class($sql)."::filterByPk*/\n".$q, (string)$sql);
         $this->table->findOneByPk($id, false);
 
         $label = get_class($this->table) . '::findOneByPk';
@@ -87,9 +87,9 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         $this->conn->returnValues = [
             [['id'=>44], ['id'=>55]]
         ];
-        $sql = $this->table->sql()->findListByPk($ids = [44,55]);
+        $sql = $this->table->sql()->filterByPk($ids = [44, 55]);
         $q = "SELECT *\nFROM table AS t\nWHERE t.id IN ('44', '55')";
-        $this->assertEquals("/*".get_class($sql)."::findListByPk*/\n".$q, (string)$sql, 'созданный SQL');
+        $this->assertEquals("/*".get_class($sql)."::filterByPk*/\n".$q, (string)$sql, 'созданный SQL');
 
         // Запрос
         $this->table->findListByPk($ids);
@@ -111,5 +111,4 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         $sql = $this->table->sql()->filterBy($filters);
         $this->assertEquals($q = "SELECT *\nFROM table AS t\nWHERE t.filter='val'", (string)$sql);
     }
-
 }
