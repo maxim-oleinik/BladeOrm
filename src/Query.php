@@ -105,7 +105,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
 
         return $this
             ->setLabel(get_class($this).'::'.__FUNCTION__, true)
-            ->andWhereIn($pk, $ids);
+            ->andWhereIn($this->col($pk), $ids);
     }
 
 
