@@ -85,7 +85,7 @@ abstract class Table
     private $sql;
 
     /**
-     * @var EventListenerInterface[] - Обработчики событий
+     * @var callable[] - Обработчики событий
      */
     private $listeners = [];
 
@@ -127,11 +127,11 @@ abstract class Table
 
 
     /**
-     * @param string                 $eventName
-     * @param EventListenerInterface $listener
+     * @param string   $eventName
+     * @param callable $listener
      * @return $this
      */
-    public function addListener($eventName, EventListenerInterface $listener)
+    public function addListener($eventName, callable $listener)
     {
         switch ($eventName) {
             case self::EVENT_PRE_SAVE:
@@ -160,9 +160,9 @@ abstract class Table
     private function _notify($eventName, Model $item)
     {
         if (isset($this->listeners[$eventName])) {
-            /** @var EventListenerInterface $listener */
+            /** @var callable $listener */
             foreach ($this->listeners[$eventName] as $listener) {
-                $listener->process($item);
+                $listener($item);
             }
         }
     }

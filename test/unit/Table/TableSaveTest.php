@@ -3,7 +3,6 @@
 use Blade\Database\DbAdapter;
 use BladeOrm\Model;
 use BladeOrm\Table;
-use BladeOrm\EventListenerInterface;
 use Blade\Database\Connection\TestStubDbConnection;
 
 class Item extends Model
@@ -17,7 +16,7 @@ class BaseTableSaveTestTable extends Table
     protected $availableFields = ['code', 'name', 'deleted_at'];
 }
 
-class BaseTableSaveEventListener implements EventListenerInterface {
+class BaseTableSaveEventListener {
     private $logger;
     private $type;
 
@@ -27,7 +26,7 @@ class BaseTableSaveEventListener implements EventListenerInterface {
         $this->logger = $logger;
     }
 
-    public function process(Model $model)
+    public function __invoke(Model $model)
     {
         $this->logger->log .= $this->type . ' ';
     }
