@@ -11,7 +11,7 @@ class TableFactoryTestQuery extends Query {}
 class TableFactoryTestModel extends Model {}
 class TableFactoryTestTable extends Table
 {
-    const TABLE = 'db_table_name';
+    protected $tableName = 'db_table_name';
 }
 
 /**

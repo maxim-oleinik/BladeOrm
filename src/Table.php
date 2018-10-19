@@ -32,12 +32,12 @@ abstract class Table
     /**
      * @var string - Таблица БД
      */
-    const TABLE = null;
+    protected $tableName;
 
     /**
      * @var string - Алиас таблицы для SQL
      */
-    const ALIAS = null;
+    protected $tableAlias;
 
     /**
      * @var string - Колонка с "первичным ключом" таблицы
@@ -123,6 +123,12 @@ abstract class Table
     public function __construct(DbAdapter $db)
     {
         $this->db = $db;
+
+        // Генерация уникального алиаса Таблицы, если не указан
+        static $counter = 1;
+        if (!$this->tableAlias) {
+            $this->tableAlias = 't' . $counter++;
+        }
     }
 
 
@@ -182,11 +188,10 @@ abstract class Table
      */
     public function getTableName()
     {
-        $table = static::TABLE;
-        if (!$table) {
+        if (!$this->tableName) {
             throw new \RuntimeException(get_class($this) . '::' . __FUNCTION__.": Expected Table name");
         }
-        return $table;
+        return $this->tableName;
     }
 
 
@@ -206,7 +211,7 @@ abstract class Table
      */
     public function getTableAlias()
     {
-        return static::ALIAS;
+        return $this->tableAlias;
     }
 
     /**

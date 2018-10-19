@@ -20,7 +20,7 @@ class TableMappingTestModel extends Model {}
  */
 class TestTable extends Table
 {
-    const TABLE = 'test';
+    protected $tableName = 'test';
 
     protected $modelName = \BladeOrm\Test\TableMappingTestModel::class;
 

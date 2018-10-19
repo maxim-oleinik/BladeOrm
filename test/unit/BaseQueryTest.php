@@ -10,8 +10,8 @@ use Blade\Database\Connection\TestStubDbConnection;
  */
 class BaseQueryTestTable extends Table
 {
-    const TABLE = 'table';
-    const ALIAS = 't';
+    protected $tableName  = 'table';
+    protected $tableAlias = 't';
     protected $query = BaseQueryTestQuery::class;
 }
 

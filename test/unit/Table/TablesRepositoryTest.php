@@ -10,7 +10,7 @@ class TablesRepositoryTestModel extends Model {}
 class TablesRepositoryTestChildModel extends TablesRepositoryTestModel {}
 class TablesRepositoryTestTable extends Table
 {
-    const TABLE = 'db_table_name';
+    protected $tableName = 'db_table_name';
 }
 
 /**

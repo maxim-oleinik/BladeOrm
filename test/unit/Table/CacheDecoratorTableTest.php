@@ -8,7 +8,7 @@ use BladeOrm\Table\CacheDecoratorTable;
 class CacheDecoratorTestModel extends Model {}
 class CacheDecoratorTestTable extends Table
 {
-    const TABLE = 'db_table_name';
+    protected $tableName = 'db_table_name';
     protected $modelName = CacheDecoratorTestModel::class;
 }
 

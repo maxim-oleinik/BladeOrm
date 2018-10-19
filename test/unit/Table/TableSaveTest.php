@@ -12,7 +12,8 @@ class Item extends Model
 
 class BaseTableSaveTestTable extends Table
 {
-    const TABLE = 'test';
+    protected $tableName  = 'test';
+    protected $tableAlias = 't';
     protected $availableFields = ['code', 'name', 'deleted_at'];
 }
 
@@ -111,7 +112,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($item->isNew(), 'Отмечен как сохранен');
         $this->assertSame(['unknown'=>22], $item->getValuesUpdated(), 'Обнулены isModified');
 
-        $this->assertSame("UPDATE test SET code='New Code'\nWHERE id='556'", $this->conn->log[0]);
+        $this->assertSame("UPDATE test AS t SET code='New Code'\nWHERE t.id='556'", $this->conn->log[0]);
 
         $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
     }
@@ -130,7 +131,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
         $db = $this->table->getAdapter();
         $this->table->softDelete($item);
 
-        $this->assertSame(sprintf("UPDATE test SET deleted_at='%s'\nWHERE id='556'", date('Y-m-d H:i:s')), $this->conn->log[0]);
+        $this->assertSame(sprintf("UPDATE test AS t SET deleted_at='%s'\nWHERE t.id='556'", date('Y-m-d H:i:s')), $this->conn->log[0]);
         $this->assertEquals('pre_update pre_save post_update post_save ', $this->eventLogger->log);
     }
 
@@ -150,7 +151,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
 
         // Указали Модель
         $this->table->delete($item);
-        $this->assertSame("DELETE FROM test\nWHERE id IN ('556')", $this->conn->log[0]);
+        $this->assertSame("DELETE FROM test AS t\nWHERE t.id IN ('556')", $this->conn->log[0]);
         $this->assertEquals('post_delete ', $this->eventLogger->log);
 
         // SotfDeleteOnVoilation
