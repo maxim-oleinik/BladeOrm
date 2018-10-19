@@ -1,6 +1,5 @@
 <?php namespace BladeOrm\Exception;
 
-
 use BladeOrm\Table;
 
 class ModelNotFoundException extends \Exception
@@ -11,7 +10,7 @@ class ModelNotFoundException extends \Exception
     protected $table;
 
     /**
-     * @return mixed
+     * @return Table
      */
     public function getTable()
     {
@@ -20,16 +19,19 @@ class ModelNotFoundException extends \Exception
 
     /**
      * ModelNotFoundException constructor.
-     * @param Table $table - обязателен для того, чтобы можно было олбработать информацию, связанную с классом таблицы.
-     *      Например вывести ошибку пользователю
+     *
+     * @param Table  $table
      * @param string $message
-     * @param int $code
-     * @param null $previous
+     * @param int    $code
+     * @param null   $previous
      */
     public function __construct(Table $table, $message = "", $code = 0, $previous = null)
     {
-        $this->table=$table;
-        parent::__construct($message, $code, $previous);
+        $this->table = $table;
+        $finalMessage = get_class($table);
+        if ($message) {
+            $finalMessage .= " ({$message})";
+        }
+        parent::__construct($finalMessage, $code, $previous);
     }
-
 }

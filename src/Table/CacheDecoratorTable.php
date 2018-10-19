@@ -102,7 +102,7 @@ class CacheDecoratorTable
             return current($items);
         } else {
             if ($exception) {
-                throw new ModelNotFoundException($this->table);
+                throw new ModelNotFoundException($this->table, $sql->buildWhere(true));
             }
             return false;
         }

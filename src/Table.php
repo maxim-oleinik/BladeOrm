@@ -280,11 +280,10 @@ abstract class Table
 
     /**
      * Find ONE
+     *
      * @throws ModelNotFoundException
-     *
-     * @param \Blade\Database\Sql\SqlBuilder $sql
-     * @param bool                 $exception
-     *
+     * @param SqlBuilder $sql
+     * @param bool       $exception
      * @return false|Model
      */
     public function findOne(SqlBuilder $sql, $exception = false)
@@ -296,7 +295,7 @@ abstract class Table
             return current($items);
         } else {
             if ($exception) {
-                throw new ModelNotFoundException($this);
+                throw new ModelNotFoundException($this, $sql->buildWhere(true));
             }
             return false;
         }
