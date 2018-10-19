@@ -21,12 +21,6 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      */
     private $cacheMinutes;
 
-    /**
-     * Поля разрешенные для фильтрации
-     *
-     * @var array
-     */
-    protected $filtersAllowed = [];
 
     /**
      * @return Table - Таблица
@@ -114,20 +108,11 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      *
      * @param array $filters
      * @return $this
-     * @throws \InvalidArgumentException
      */
     public function filterBy(array $filters)
     {
-        $filtersKeys = array_keys($filters);
-        if ($this->filtersAllowed) {
-            $filtersDisalowedKeys = array_diff($filtersKeys, $this->filtersAllowed);
-            if ($filtersDisalowedKeys) {
-                throw new \InvalidArgumentException('Переданы неразрешенные фильтры: ' . implode(' ,', $filtersDisalowedKeys));
-            }
-            $filtersKeys = array_intersect($filtersKeys, $this->filtersAllowed);
-        }
-        foreach ($filtersKeys as $key) {
-            $this->andWhere($this->col($key) . "='%s'", $filters[$key]);
+        foreach ($filters as $key => $value) {
+            $this->andWhereEquals($this->col($key), $value);
         }
         return $this;
     }
