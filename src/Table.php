@@ -127,6 +127,7 @@ abstract class Table
 
 
     /**
+     * @param string                 $eventName
      * @param EventListenerInterface $listener
      * @return $this
      */
@@ -144,17 +145,17 @@ abstract class Table
                 break;
 
             default:
-                throw new \InvalidArgumentException(__METHOD__.": unknown event name `{$eventName}`");
-         }
+                throw new \InvalidArgumentException(__METHOD__ . ": unknown event name `{$eventName}`");
+        }
 
-         return $this;
+        return $this;
     }
 
     /**
      * Уведомить обработчики событий
      *
      * @param string $eventName
-     * @param Model $item
+     * @param Model  $item
      */
     private function _notify($eventName, Model $item)
     {
@@ -313,12 +314,12 @@ abstract class Table
     {
         $id = (string)$id;
         if ($id) {
-            return CacheRepository::item($this->getTableName(), $id, function() use ($id, $exception) {
+            return CacheRepository::item($this->getTableName(), $id, function () use ($id, $exception) {
                 $sql = $this->sql(get_class($this).'::findOneByPk')->filterByPk($id);
                 return $this->findOne($sql, $exception);
             });
 
-        } else if ($exception) {
+        } elseif ($exception) {
             throw new \InvalidArgumentException(get_class($this).'::'.__FUNCTION__.": ID is not given");
 
         } else {
@@ -330,7 +331,7 @@ abstract class Table
     /**
      * Найти записи по первичному ключу
      *
-     * @param $ids
+     * @param  array $ids
      * @return Model[]
      */
     public function findListByPk(array $ids)
@@ -396,6 +397,9 @@ abstract class Table
         return $sql;
     }
 
+    /**
+     * @param \BladeOrm\Query $sql
+     */
     public function setBaseQuery(Query $sql)
     {
         $sql->setTable($this)
@@ -469,14 +473,13 @@ abstract class Table
      * INSERT
      *
      * @param Model $item
-     * @throws \DatabaseException
      */
     public function insert(Model $item)
     {
         $values = $this->filterFields($item->toArray());
         if ($values) {
 
-            $this->_pre_save($item, false);
+            $this->preSave($item, false);
             $this->_notify(self::EVENT_PRE_INSERT, $item);
             $this->_notify(self::EVENT_PRE_SAVE, $item);
 
@@ -484,9 +487,9 @@ abstract class Table
             // и маппер может добавить поля
             $insertValues = $this->filterFields($this->mapToDb($item->toArray()));
             if ($insertValues) {
-                $this->_do_insert($insertValues, $item);
+                $this->doInsert($insertValues, $item);
 
-                $this->_post_save($item, false);
+                $this->postSave($item, false);
                 $this->_notify(self::EVENT_POST_INSERT, $item);
                 $this->_notify(self::EVENT_POST_SAVE, $item);
 
@@ -498,10 +501,10 @@ abstract class Table
     }
 
     /**
-     * @param array                  $mappedValues
+     * @param array $mappedValues
      * @param Model $item
      */
-    protected function _do_insert(array $mappedValues, Model $item)
+    protected function doInsert(array $mappedValues, Model $item)
     {
         $sql = $this->sql()->insert()
             ->values($mappedValues)
@@ -525,7 +528,7 @@ abstract class Table
 
             // PreUpdate Event
             // Еще можно изменить состояние объекта перед сохранением
-            $this->_pre_save($item, true);
+            $this->preSave($item, true);
             $this->_notify(self::EVENT_PRE_UPDATE, $item);
             $this->_notify(self::EVENT_PRE_SAVE, $item);
 
@@ -534,12 +537,12 @@ abstract class Table
             // и маппер может добавить поля
             $updateValues = $this->filterFields($this->mapToDb($values));
             if ($updateValues) {
-                $this->_do_update($updateValues, $item);
+                $this->doUpdate($updateValues, $item);
 
                 // PostUpdate Event
                 // Данные уже сохранены в БД, но еще отмечены как Измененные
                 // Больше нельзя вносить изменения в состояние объекта
-                $this->_post_save($item, true);
+                $this->postSave($item, true);
                 $this->_notify(self::EVENT_POST_UPDATE, $item);
                 $this->_notify(self::EVENT_POST_SAVE, $item);
 
@@ -551,10 +554,10 @@ abstract class Table
     }
 
     /**
-     * @param array                  $mappedValues
+     * @param array $mappedValues
      * @param Model $item
      */
-    protected function _do_update(array $mappedValues, Model $item)
+    protected function doUpdate(array $mappedValues, Model $item)
     {
         $sql = $this->sql()->update()->values($mappedValues);
         foreach ((array)$this->getPrimaryKey() as $pk) {
@@ -567,17 +570,21 @@ abstract class Table
      * PRE SAVE hook
      *
      * @param Model $item
-     * @param bool                   $isUpdate
+     * @param bool  $isUpdate
      */
-    protected function _pre_save(Model $item, $isUpdate) {}
+    protected function preSave(Model $item, $isUpdate)
+    {
+    }
 
     /**
      * POST SAVE hook
      *
      * @param Model $item
-     * @param bool                   $isUpdate
+     * @param bool  $isUpdate
      */
-    protected function _post_save(Model $item, $isUpdate) { }
+    protected function postSave(Model $item, $isUpdate)
+    {
+    }
 
 
     /**
@@ -636,7 +643,7 @@ abstract class Table
     // ------------------------------------------------------------------------
 
     /**
-     * @param $aliasOrClass
+     * @param string $aliasOrClass
      * @return \BladeOrm\Table\Mapper\MapperInterface
      */
     public static function getMapper($aliasOrClass)
@@ -662,7 +669,7 @@ abstract class Table
      */
     public function mapToDb(array $values)
     {
-        return $this->_map_values($values, true);
+        return $this->_mapValues($values, true);
     }
 
     /**
@@ -673,7 +680,7 @@ abstract class Table
      */
     public function mapFromDb(array $values)
     {
-        return $this->_map_values($values, false);
+        return $this->_mapValues($values, false);
     }
 
     /**
@@ -683,9 +690,9 @@ abstract class Table
      * @param  bool  $toDb
      * @return array
      */
-    private function _map_values(array $values, $toDb = true)
+    private function _mapValues(array $values, $toDb = true)
     {
-        $this->_init_columns();
+        $this->_initColumns();
 
         foreach ($this->columns as $column) {
             $columnName = $column->getName();
@@ -733,7 +740,7 @@ abstract class Table
     /**
      * Инициализация колонок
      */
-    private function _init_columns()
+    private function _initColumns()
     {
         if (null === $this->columns) {
             $this->columns = [];
@@ -762,5 +769,4 @@ abstract class Table
             }
         }
     }
-
 }
