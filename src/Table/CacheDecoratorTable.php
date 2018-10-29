@@ -5,7 +5,6 @@ use BladeOrm\Model;
 use BladeOrm\Query;
 use BladeOrm\Table;
 
-
 class CacheDecoratorTable
 {
     /**

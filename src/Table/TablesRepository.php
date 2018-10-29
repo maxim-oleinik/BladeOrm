@@ -27,10 +27,10 @@ class TablesRepository
     /**
      * Конструктор
      *
-     * @param TableFactory $factory
-     * @param array        $tablesData
+     * @param TableFactoryInterface $factory
+     * @param array                 $tablesData
      */
-    public function __construct(TableFactory $factory, array $tablesData = [])
+    public function __construct(TableFactoryInterface $factory, array $tablesData = [])
     {
         $this->factory = $factory;
         if ($tablesData) {

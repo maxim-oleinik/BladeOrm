@@ -6,7 +6,7 @@ use BladeOrm\Table;
 /**
  * @see \BladeOrm\Test\Table\TableFactoryTest
  */
-class TableFactory
+class TableFactory implements TableFactoryInterface
 {
     /**
      * @var DbAdapter
