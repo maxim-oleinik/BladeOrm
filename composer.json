@@ -10,7 +10,7 @@
 
   "require": {
     "php": ">=7.0",
-    "maxim-oleinik/blade-database": "dev-master"
+    "maxim-oleinik/blade-database": "^0.2.3"
   },
   "require-dev": {
     "phpunit/phpunit": "5.*"
