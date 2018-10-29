@@ -37,6 +37,6 @@ class TableFacade
         if ($repo->has($model)) {
             return $repo->table($model);
         }
-        return $repo->tableForModel($model);
+        return $repo->get($model);
     }
 }

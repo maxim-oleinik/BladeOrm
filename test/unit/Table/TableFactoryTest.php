@@ -9,10 +9,7 @@ use Blade\Database\Connection\TestStubDbConnection;
 
 class TableFactoryTestQuery extends Query {}
 class TableFactoryTestModel extends Model {}
-class TableFactoryTestTable extends Table
-{
-    protected $tableName = 'db_table_name';
-}
+class TableFactoryTestTable extends Table { protected $tableName = 't1'; }
 
 /**
  * @see \BladeOrm\Table\TableFactory
@@ -24,9 +21,18 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
+    /**
+     * @var DbAdapter
+     */
+    private $db;
+
+
+    /**
+     * SetUp
+     */
     protected function setUp()
     {
-        $this->factory = new TableFactory($db = new DbAdapter(new TestStubDbConnection()));
+        $this->factory = new TableFactory($this->db = new DbAdapter(new TestStubDbConnection()));
     }
 
     /**
@@ -35,7 +41,7 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
     public function testTableOnly()
     {
         $table = $this->factory->make(TableFactoryTestTable::class);
-        $this->_assert_table($table, TableFactoryTestTable::class, Model::class, Query::class);
+        $this->_assertTable($table, TableFactoryTestTable::class, Model::class, Query::class);
     }
 
     /**
@@ -44,36 +50,14 @@ class TableFactoryTest extends \PHPUnit_Framework_TestCase
     public function testTableWithQueryAndModel()
     {
         $table = $this->factory->make(TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class);
-        $this->_assert_table($table, TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class);
+        $this->_assertTable($table, TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class);
     }
 
 
-    /**
-     * Загрузка из конфига
-     */
-    public function testLoadAll()
-    {
-        $tables = $this->factory->makeFromArray($input = [
-            [TableFactoryTestTable::class],
-            [TableFactoryTestTable::class, TableFactoryTestModel::class],
-            [TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class],
-            [TableFactoryTestTable::class, null, TableFactoryTestQuery::class],
-        ]);
-
-        $this->assertEquals(count($input), count($tables), 'Создали все таблицы');
-
-        $this->_assert_table($tables[0], TableFactoryTestTable::class, Model::class, Query::class);
-        $this->_assert_table($tables[1], TableFactoryTestTable::class, TableFactoryTestModel::class, Query::class);
-        $this->_assert_table($tables[2], TableFactoryTestTable::class, TableFactoryTestModel::class, TableFactoryTestQuery::class);
-        $this->_assert_table($tables[3], TableFactoryTestTable::class, Model::class, TableFactoryTestQuery::class);
-
-    }
-
-    private function _assert_table(Table $table, $tableClass, $modelClass, $queryClass)
+    private function _assertTable(Table $table, $tableClass, $modelClass, $queryClass)
     {
         $this->assertInstanceOf($tableClass, $table, 'Таблица');
         $this->assertEquals($modelClass, $table->getModelName(), 'Модель');
         $this->assertInstanceOf($queryClass, $table->sql(), 'Query');
     }
-
 }

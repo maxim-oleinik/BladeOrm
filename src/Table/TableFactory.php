@@ -14,29 +14,25 @@ class TableFactory
     private $dbAdapter;
 
     /**
-     * @var callable
-     */
-    private $cacheFactory;
-
-    /**
      * Конструктор
      *
      * @param DbAdapter $db
      */
-    public function __construct(DbAdapter $db, callable $cacheFactory = null)
+    public function __construct(DbAdapter $db)
     {
         $this->dbAdapter = $db;
-        $this->cacheFactory = $cacheFactory;
     }
 
 
     /**
-     * @param      $tableClassName
-     * @param null $modelClassName
-     * @param null $queryClassName
+     * Создать таблицу
+     *
+     * @param string $tableClassName
+     * @param string $modelClassName
+     * @param string $queryClassName
      * @return Table
      */
-    public function make($tableClassName, $modelClassName = null, $queryClassName = null)
+    public function make($tableClassName, $modelClassName = null, $queryClassName = null): Table
     {
         /** @var Table $table */
         $table = new $tableClassName($this->dbAdapter);
@@ -48,26 +44,6 @@ class TableFactory
         if ($queryClassName) {
             $table->setBaseQuery(new $queryClassName);
         }
-        if ($this->cacheFactory) {
-            $sql = $table->sql();
-            $decorator = new CacheDecoratorTable($table, $this->cacheFactory);
-            $sql->setFinder($decorator);
-            $table->setBaseQuery($sql);
-        }
         return $table;
-    }
-
-
-    /**
-     * @param array $tablesData
-     * @return array
-     */
-    public function makeFromArray(array $tablesData)
-    {
-        $result = [];
-        foreach ($tablesData as $data) {
-            $result[] = $this->make(...$data);
-        }
-        return $result;
     }
 }
