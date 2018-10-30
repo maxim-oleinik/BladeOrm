@@ -1,4 +1,4 @@
-<?php namespace BladeOrm;
+<?php namespace Blade\Orm;
 
 /**
  * Запрос для работы с Таблицей
@@ -125,7 +125,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      * Получить список объектов у Таблицы
      *
      * @param string $indexBy - Проиндексировать массив по указанному полю
-     * @return \BladeOrm\Model[]
+     * @return \Blade\Orm\Model[]
      */
     public function fetchModelsList($indexBy = null)
     {
@@ -136,7 +136,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
      * Получить один объект у Таблицы
      *
      * @param  bool $exception
-     * @return false|\BladeOrm\Model
+     * @return false|\Blade\Orm\Model
      */
     public function fetchModel($exception = false)
     {

@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Test\Model;
+<?php namespace Blade\Orm\Test\Model;
 
-use BladeOrm\Model;
+use Blade\Orm\Model;
 
 
 class CreateTestModel extends Model
@@ -22,7 +22,7 @@ class CreateTestModel extends Model
 }
 
 /**
- * @see \BladeOrm\Model
+ * @see \Blade\Orm\Model
  */
 class CreateTest extends \PHPUnit_Framework_TestCase
 {

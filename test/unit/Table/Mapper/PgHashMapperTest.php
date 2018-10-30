@@ -1,13 +1,13 @@
-<?php namespace BladeOrm\Test\Table\Mapper;
+<?php namespace Blade\Orm\Test\Table\Mapper;
 
 use Blade\Database\Sql\SqlFunc;
-use BladeOrm\Table\Mapper\PgHashMapper;
+use Blade\Orm\Table\Mapper\PgHashMapper;
 
 require_once __DIR__ . '/BaseMapperTestCase.php';
 
 
 /**
- * @see \BladeOrm\Table\Mapper\PgHashMapper
+ * @see \Blade\Orm\Table\Mapper\PgHashMapper
  */
 class PgHashMapperTest extends BaseMapperTestCase
 {

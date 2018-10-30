@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Test\Model;
+<?php namespace Blade\Orm\Test\Model;
 
-use BladeOrm\Model;
+use Blade\Orm\Model;
 
 
 class TestModelForIsModifiedTest extends Model

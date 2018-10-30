@@ -1,4 +1,4 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
 
 class FloatMapper implements MapperInterface

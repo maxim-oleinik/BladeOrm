@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Test\Model;
+<?php namespace Blade\Orm\Test\Model;
 
-use BladeOrm\Model;
+use Blade\Orm\Model;
 
 
 class TestModelForForceSettersGettersTest extends Model
@@ -28,7 +28,7 @@ class TestModelForForceSettersGettersTest extends Model
 
 
 /**
- * @see \BladeOrm\Model
+ * @see \Blade\Orm\Model
  */
 class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
 {

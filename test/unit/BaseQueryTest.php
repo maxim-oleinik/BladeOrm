@@ -1,8 +1,8 @@
-<?php namespace BladeOrm\Test;
+<?php namespace Blade\Orm\Test;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Query;
-use BladeOrm\Table;
+use Blade\Orm\Query;
+use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 
 /**

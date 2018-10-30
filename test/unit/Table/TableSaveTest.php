@@ -1,8 +1,8 @@
-<?php namespace BladeOrm\Test;
+<?php namespace Blade\Orm\Test;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Model;
-use BladeOrm\Table;
+use Blade\Orm\Model;
+use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 
 class Item extends Model

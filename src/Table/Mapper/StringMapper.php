@@ -1,8 +1,8 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\StringMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\StringMapperTest
  */
 class StringMapper implements MapperInterface
 {

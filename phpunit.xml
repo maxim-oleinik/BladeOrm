@@ -10,7 +10,7 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="BladeOrm Tests">
+        <testsuite name="Blade\Orm Tests">
             <directory>./test</directory>
         </testsuite>
     </testsuites>

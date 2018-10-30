@@ -1,9 +1,9 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
-use BladeOrm\Value\GeoPoint;
+use Blade\Orm\Value\GeoPoint;
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\GeoPointMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\GeoPointMapperTest
  */
 class GeoPointMapper implements MapperInterface
 {

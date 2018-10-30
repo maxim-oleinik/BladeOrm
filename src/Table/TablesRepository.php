@@ -1,10 +1,10 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
-use BladeOrm\Model;
-use BladeOrm\Table;
+use Blade\Orm\Model;
+use Blade\Orm\Table;
 
 /**
- * @see \BladeOrm\Test\Table\TablesRepositoryTest
+ * @see \Blade\Orm\Test\Table\TablesRepositoryTest
  */
 class TablesRepository
 {

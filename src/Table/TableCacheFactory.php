@@ -1,9 +1,9 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
-use BladeOrm\Table;
+use Blade\Orm\Table;
 
 /**
- * @see \BladeOrm\Test\Table\TableFactoryTest
+ * @see \Blade\Orm\Test\Table\TableFactoryTest
  */
 class TableCacheFactory implements TableFactoryInterface
 {

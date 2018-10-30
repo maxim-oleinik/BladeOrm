@@ -1,12 +1,12 @@
-<?php namespace BladeOrm\Test\Table\Mapper;
+<?php namespace Blade\Orm\Test\Table\Mapper;
 
-use BladeOrm\Table\Mapper\MapperInterface;
+use Blade\Orm\Table\Mapper\MapperInterface;
 
 
 abstract class BaseMapperTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param \BladeOrm\Table\Mapper\MapperInterface $mapper
+     * @param \Blade\Orm\Table\Mapper\MapperInterface $mapper
      * @param array                                   $planWrite
      * @param bool                                    $strict
      */

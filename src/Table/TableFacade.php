@@ -1,4 +1,4 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
 class TableFacade
 {
@@ -25,7 +25,7 @@ class TableFacade
 
     /**
      * @param $model
-     * @return \BladeOrm\Table
+     * @return \Blade\Orm\Table
      */
     public static function get($model)
     {
@@ -39,7 +39,7 @@ class TableFacade
 
     /**
      * @param  string $className
-     * @return \BladeOrm\Table
+     * @return \Blade\Orm\Table
      */
     public static function table($className)
     {

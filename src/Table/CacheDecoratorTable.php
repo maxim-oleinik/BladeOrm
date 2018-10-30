@@ -1,9 +1,9 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
-use BladeOrm\Exception\ModelNotFoundException;
-use BladeOrm\Model;
-use BladeOrm\Query;
-use BladeOrm\Table;
+use Blade\Orm\Exception\ModelNotFoundException;
+use Blade\Orm\Model;
+use Blade\Orm\Query;
+use Blade\Orm\Table;
 
 class CacheDecoratorTable
 {

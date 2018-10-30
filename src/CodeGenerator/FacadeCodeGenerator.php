@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\CodeGenerator;
+<?php namespace Blade\Orm\CodeGenerator;
 
-use BladeOrm\Table\TablesRepository;
+use Blade\Orm\Table\TablesRepository;
 
 class FacadeCodeGenerator
 {
@@ -103,7 +103,7 @@ class FacadeCodeGenerator
 
 
     /**
-     * @param \BladeOrm\Table\TablesRepository $repo
+     * @param \Blade\Orm\Table\TablesRepository $repo
      */
     public function generate(TablesRepository $repo)
     {

@@ -1,9 +1,9 @@
-<?php namespace BladeOrm\Test\Table;
+<?php namespace Blade\Orm\Test\Table;
 
-use BladeOrm\Model;
-use BladeOrm\Table;
-use BladeOrm\Exception\ModelNotFoundException;
-use BladeOrm\Table\CacheDecoratorTable;
+use Blade\Orm\Model;
+use Blade\Orm\Table;
+use Blade\Orm\Exception\ModelNotFoundException;
+use Blade\Orm\Table\CacheDecoratorTable;
 
 class CacheDecoratorTestModel extends Model {}
 class CacheDecoratorTestTable extends Table

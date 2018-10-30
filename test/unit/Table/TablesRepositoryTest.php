@@ -1,12 +1,12 @@
-<?php namespace BladeOrm\Test\Table;
+<?php namespace Blade\Orm\Test\Table;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Model;
-use BladeOrm\Query;
-use BladeOrm\Table;
-use BladeOrm\Table\TableFactory;
+use Blade\Orm\Model;
+use Blade\Orm\Query;
+use Blade\Orm\Table;
+use Blade\Orm\Table\TableFactory;
 use Blade\Database\Connection\TestStubDbConnection;
-use BladeOrm\Table\TablesRepository;
+use Blade\Orm\Table\TablesRepository;
 
 class TablesRepositoryTestQuery extends Query {}
 class TablesRepositoryTestModel extends Model {}
@@ -16,7 +16,7 @@ class TablesRepositoryTestTable1 extends Table { protected $tableName = 't1'; }
 class TablesRepositoryTestTable2 extends Table { protected $tableName = 't2'; }
 
 /**
- * @see \BladeOrm\Table\TablesRepository
+ * @see \Blade\Orm\Table\TablesRepository
  */
 class TablesRepositoryTest extends \PHPUnit_Framework_TestCase
 {

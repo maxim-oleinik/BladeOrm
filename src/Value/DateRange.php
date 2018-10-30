@@ -1,4 +1,4 @@
-<?php namespace BladeOrm\Value;
+<?php namespace Blade\Orm\Value;
 
 
 /**

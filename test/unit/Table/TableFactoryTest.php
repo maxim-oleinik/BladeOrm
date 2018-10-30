@@ -1,10 +1,10 @@
-<?php namespace BladeOrm\Test\Table;
+<?php namespace Blade\Orm\Test\Table;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Model;
-use BladeOrm\Query;
-use BladeOrm\Table;
-use BladeOrm\Table\TableFactory;
+use Blade\Orm\Model;
+use Blade\Orm\Query;
+use Blade\Orm\Table;
+use Blade\Orm\Table\TableFactory;
 use Blade\Database\Connection\TestStubDbConnection;
 
 class TableFactoryTestQuery extends Query {}
@@ -12,7 +12,7 @@ class TableFactoryTestModel extends Model {}
 class TableFactoryTestTable extends Table { protected $tableName = 't1'; }
 
 /**
- * @see \BladeOrm\Table\TableFactory
+ * @see \Blade\Orm\Table\TableFactory
  */
 class TableFactoryTest extends \PHPUnit_Framework_TestCase
 {

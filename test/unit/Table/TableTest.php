@@ -1,7 +1,7 @@
-<?php namespace BladeOrm\Test\Table;
+<?php namespace Blade\Orm\Test\Table;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Table;
+use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 
 class Table1TestTable extends Table
@@ -21,7 +21,7 @@ class Table3TestTable extends Table
 }
 
 /**
- * @see \BladeOrm\Table
+ * @see \Blade\Orm\Table
  */
 class TableTest extends \PHPUnit_Framework_TestCase
 {

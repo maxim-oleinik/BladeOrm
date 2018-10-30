@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Test\Model;
+<?php namespace Blade\Orm\Test\Model;
 
-use BladeOrm\Model;
+use Blade\Orm\Model;
 
 
 class TestModelOthersTest extends Model
@@ -10,7 +10,7 @@ class TestModelOthersTest extends Model
     ];
 
     protected $updateTriggers = [
-        'col_trigger' => [\BladeOrm\Test\Model\TestModelOthersTest::class, '_modify_trigger'],
+        'col_trigger' => [\Blade\Orm\Test\Model\TestModelOthersTest::class, '_modify_trigger'],
     ];
 
     protected static function _set_col_callable($newValue)
@@ -26,7 +26,7 @@ class TestModelOthersTest extends Model
 
 
 /**
- * @see \BladeOrm\Model
+ * @see \Blade\Orm\Model
  */
 class OthersTest extends \PHPUnit_Framework_TestCase
 {

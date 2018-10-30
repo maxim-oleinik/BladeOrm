@@ -1,10 +1,10 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
 use Blade\Database\Sql\SqlBuilder;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\PgHashMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\PgHashMapperTest
  */
 class PgHashMapper implements MapperInterface
 {

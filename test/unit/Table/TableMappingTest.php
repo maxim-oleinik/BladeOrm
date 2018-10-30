@@ -1,32 +1,32 @@
-<?php namespace BladeOrm\Test;
+<?php namespace Blade\Orm\Test;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Model;
-use BladeOrm\Table;
-use BladeOrm\Table\Mapper\MapperInterface;
+use Blade\Orm\Model;
+use Blade\Orm\Table;
+use Blade\Orm\Table\Mapper\MapperInterface;
 use Blade\Database\Connection\TestStubDbConnection;
 
 /**
  * Class TableMappingTestModel
  *
- * @package BladeOrm\Test
+ * @package Blade\Orm\Test
  */
 class TableMappingTestModel extends Model {}
 
 /**
  * Class TestTable
  *
- * @package BladeOrm\Test
+ * @package Blade\Orm\Test
  */
 class TestTable extends Table
 {
     protected $tableName = 'test';
 
-    protected $modelName = \BladeOrm\Test\TableMappingTestModel::class;
+    protected $modelName = \Blade\Orm\Test\TableMappingTestModel::class;
 
     protected $casts = [
-        'col_upper'      => ['null', \BladeOrm\Test\TestUpperMapper::class],
-        'col_multi'      => [\BladeOrm\Test\TestMultiColumnMapper::class],
+        'col_upper'      => ['null', \Blade\Orm\Test\TestUpperMapper::class],
+        'col_multi'      => [\Blade\Orm\Test\TestMultiColumnMapper::class],
     ];
 
 }
@@ -53,7 +53,7 @@ class TestUpperMapper implements MapperInterface
 /**
  * Class TestUpperMapper
  */
-class TestMultiColumnMapper implements \BladeOrm\Table\Mapper\MultiColumnMapperInterface
+class TestMultiColumnMapper implements \Blade\Orm\Table\Mapper\MultiColumnMapperInterface
 {
     public function toDb($value)
     {
@@ -90,9 +90,9 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
     {
         $table = new TestTable(new DbAdapter(new TestStubDbConnection()));
         $mapper = $table->getMapper('pg_bool');
-        $this->assertInstanceOf(\BladeOrm\Table\Mapper\PgBoolMapper::class, $mapper);
+        $this->assertInstanceOf(\Blade\Orm\Table\Mapper\PgBoolMapper::class, $mapper);
         $this->assertSame($mapper, $table->getMapper('pg_bool'));
-        $this->assertSame($mapper, $table->getMapper(\BladeOrm\Table\Mapper\PgBoolMapper::class));
+        $this->assertSame($mapper, $table->getMapper(\Blade\Orm\Table\Mapper\PgBoolMapper::class));
     }
 
 
@@ -118,7 +118,7 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
     {
         $table = new TestTable(new DbAdapter(new TestStubDbConnection()));
         $m = $table->makeModel(['col_upper' => 'text']);
-        $this->assertInstanceOf(\BladeOrm\Test\TableMappingTestModel::class, $m);
+        $this->assertInstanceOf(\Blade\Orm\Test\TableMappingTestModel::class, $m);
         $this->assertFalse($m->isNew(), 'Таблица всегда создает НЕ новый объект');
         $this->assertSame('text+', $m->get('col_upper'));
     }

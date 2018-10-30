@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
-use BladeOrm\Table;
+use Blade\Orm\Table;
 
 interface TableFactoryInterface
 {

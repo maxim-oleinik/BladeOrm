@@ -1,6 +1,6 @@
-<?php namespace BladeOrm\Exception;
+<?php namespace Blade\Orm\Exception;
 
-use BladeOrm\Table;
+use Blade\Orm\Table;
 
 class ModelNotFoundException extends \Exception
 {

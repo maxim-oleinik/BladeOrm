@@ -1,4 +1,4 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
 
 /**

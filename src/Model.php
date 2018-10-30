@@ -1,13 +1,13 @@
-<?php namespace BladeOrm;
+<?php namespace Blade\Orm;
 
 
 /**
- * @see \BladeOrm\Test\Model\CreateTest
- * @see \BladeOrm\Test\Model\ForceSettersGettersTest
- * @see \BladeOrm\Test\Model\SetGetTest
- * @see \BladeOrm\Test\Model\IsModifiedTest
- * @see \BladeOrm\Test\Model\TransformTest
- * @see \BladeOrm\Test\Model\OthersTest
+ * @see \Blade\Orm\Test\Model\CreateTest
+ * @see \Blade\Orm\Test\Model\ForceSettersGettersTest
+ * @see \Blade\Orm\Test\Model\SetGetTest
+ * @see \Blade\Orm\Test\Model\IsModifiedTest
+ * @see \Blade\Orm\Test\Model\TransformTest
+ * @see \Blade\Orm\Test\Model\OthersTest
  */
 class Model
 {

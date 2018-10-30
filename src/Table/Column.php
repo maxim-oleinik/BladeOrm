@@ -1,11 +1,11 @@
-<?php namespace BladeOrm\Table;
+<?php namespace Blade\Orm\Table;
 
-use BladeOrm\Table\Mapper\MapperInterface;
-use BladeOrm\Table\Mapper\MultiColumnMapperInterface;
+use Blade\Orm\Table\Mapper\MapperInterface;
+use Blade\Orm\Table\Mapper\MultiColumnMapperInterface;
 
 
 /**
- * @see \BladeOrm\Test\Table\ColumnTest
+ * @see \Blade\Orm\Test\Table\ColumnTest
  */
 class Column implements MapperInterface
 {
@@ -32,7 +32,7 @@ class Column implements MapperInterface
 
 
     /**
-     * @param \BladeOrm\Table\Mapper\MapperInterface $mapper
+     * @param \Blade\Orm\Table\Mapper\MapperInterface $mapper
      */
     public function setMapper(MapperInterface $mapper)
     {

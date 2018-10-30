@@ -1,12 +1,12 @@
-<?php namespace BladeOrm\Test\Table;
+<?php namespace Blade\Orm\Test\Table;
 
-use BladeOrm\Table\Column;
-use BladeOrm\Table\Mapper\IntMapper;
-use BladeOrm\Table\Mapper\MapperInterface;
+use Blade\Orm\Table\Column;
+use Blade\Orm\Table\Mapper\IntMapper;
+use Blade\Orm\Table\Mapper\MapperInterface;
 
 
 /**
- * @see \BladeOrm\Table\Column
+ * @see \Blade\Orm\Table\Column
  */
 class ColumnTest extends \PHPUnit_Framework_TestCase
 {

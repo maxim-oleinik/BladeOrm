@@ -1,10 +1,10 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
-use BladeOrm\Value\DateRange;
+use Blade\Orm\Value\DateRange;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\DaterangeMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\DaterangeMapperTest
  */
 class PgDaterangeMapper implements MapperInterface
 {
@@ -29,7 +29,7 @@ class PgDaterangeMapper implements MapperInterface
 
     /**
      * @param string $value
-     * @return null|\BladeOrm\Value\DateRange
+     * @return null|\Blade\Orm\Value\DateRange
      */
     public function fromDb(&$value)
     {

@@ -1,11 +1,11 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
-use BladeOrm\Value\DateTime;
-use BladeOrm\Value\DateTimeNull;
+use Blade\Orm\Value\DateTime;
+use Blade\Orm\Value\DateTimeNull;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\DatetimeMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\DatetimeMapperTest
  */
 class DatetimeMapper implements MapperInterface
 {

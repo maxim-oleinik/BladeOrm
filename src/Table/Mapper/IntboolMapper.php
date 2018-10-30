@@ -1,8 +1,8 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\IntboolMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\IntboolMapperTest
  */
 class IntboolMapper implements MapperInterface
 {

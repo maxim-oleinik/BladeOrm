@@ -1,19 +1,19 @@
-<?php namespace BladeOrm;
+<?php namespace Blade\Orm;
 
 use Blade\Database\DbAdapter;
-use BladeOrm\Exception\ModelNotFoundException;
-use BladeOrm\Table\Column;
-use BladeOrm\Table\Mapper\MapperInterface;
-use BladeOrm\Table\CacheRepository;
+use Blade\Orm\Exception\ModelNotFoundException;
+use Blade\Orm\Table\Column;
+use Blade\Orm\Table\Mapper\MapperInterface;
+use Blade\Orm\Table\CacheRepository;
 use Blade\Database\Sql\SqlBuilder;
 
 /**
  * Отвечает за сохранение и получение Моделей из БД
  * Преобразует полученные из БД данные в необходимые типы для Модели и наоборот
  *
- * @see \BladeOrm\Test\TableSaveTest
- * @see \BladeOrm\Test\TableMappingTest
- * @see \BladeOrm\Test\BaseQueryTest
+ * @see \Blade\Orm\Test\TableSaveTest
+ * @see \Blade\Orm\Test\TableMappingTest
+ * @see \Blade\Orm\Test\BaseQueryTest
  */
 abstract class Table
 {
@@ -94,17 +94,17 @@ abstract class Table
      */
     private static $mappers = [];
     private static $mapperAliases = [
-        'string'       => \BladeOrm\Table\Mapper\StringMapper::class,
-        'int'          => \BladeOrm\Table\Mapper\IntMapper::class,
-        'float'        => \BladeOrm\Table\Mapper\FloatMapper::class,
-        'pg_bool'      => \BladeOrm\Table\Mapper\PgBoolMapper::class,
-        'intbool'      => \BladeOrm\Table\Mapper\IntboolMapper::class,
-        'pg_array'     => \BladeOrm\Table\Mapper\PgArrayMapper::class,
-        'pg_hash'      => \BladeOrm\Table\Mapper\PgHashMapper::class,
-        'datetime'     => \BladeOrm\Table\Mapper\DatetimeMapper::class,
-        'pg_daterange' => \BladeOrm\Table\Mapper\PgDaterangeMapper::class,
-        'json'         => \BladeOrm\Table\Mapper\JsonMapper::class,
-        'geo_point'    => \BladeOrm\Table\Mapper\GeoPointMapper::class,
+        'string'       => \Blade\Orm\Table\Mapper\StringMapper::class,
+        'int'          => \Blade\Orm\Table\Mapper\IntMapper::class,
+        'float'        => \Blade\Orm\Table\Mapper\FloatMapper::class,
+        'pg_bool'      => \Blade\Orm\Table\Mapper\PgBoolMapper::class,
+        'intbool'      => \Blade\Orm\Table\Mapper\IntboolMapper::class,
+        'pg_array'     => \Blade\Orm\Table\Mapper\PgArrayMapper::class,
+        'pg_hash'      => \Blade\Orm\Table\Mapper\PgHashMapper::class,
+        'datetime'     => \Blade\Orm\Table\Mapper\DatetimeMapper::class,
+        'pg_daterange' => \Blade\Orm\Table\Mapper\PgDaterangeMapper::class,
+        'json'         => \Blade\Orm\Table\Mapper\JsonMapper::class,
+        'geo_point'    => \Blade\Orm\Table\Mapper\GeoPointMapper::class,
     ];
 
     /**
@@ -403,7 +403,7 @@ abstract class Table
     }
 
     /**
-     * @param \BladeOrm\Query $sql
+     * @param \Blade\Orm\Query $sql
      */
     public function setBaseQuery(Query $sql)
     {
@@ -649,7 +649,7 @@ abstract class Table
 
     /**
      * @param string $aliasOrClass
-     * @return \BladeOrm\Table\Mapper\MapperInterface
+     * @return \Blade\Orm\Table\Mapper\MapperInterface
      */
     public static function getMapper($aliasOrClass)
     {

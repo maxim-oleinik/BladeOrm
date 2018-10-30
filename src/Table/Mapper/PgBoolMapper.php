@@ -1,8 +1,8 @@
-<?php namespace BladeOrm\Table\Mapper;
+<?php namespace Blade\Orm\Table\Mapper;
 
 
 /**
- * @see \BladeOrm\Test\Table\Mapper\PgBoolMapperTest
+ * @see \Blade\Orm\Test\Table\Mapper\PgBoolMapperTest
  */
 class PgBoolMapper implements MapperInterface
 {

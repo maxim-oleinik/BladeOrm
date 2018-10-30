@@ -1,12 +1,12 @@
-<?php namespace BladeOrm\Test\Table\Mapper;
+<?php namespace Blade\Orm\Test\Table\Mapper;
 
-use BladeOrm\Table\Mapper\PgBoolMapper;
+use Blade\Orm\Table\Mapper\PgBoolMapper;
 
 require_once __DIR__ . '/BaseMapperTestCase.php';
 
 
 /**
- * @see \BladeOrm\Table\Mapper\PgBoolMapper
+ * @see \Blade\Orm\Table\Mapper\PgBoolMapper
  */
 class PgBoolMapperTest extends BaseMapperTestCase
 {

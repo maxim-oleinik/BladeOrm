@@ -1,13 +1,13 @@
-<?php namespace BladeOrm\Test\Table\Mapper;
+<?php namespace Blade\Orm\Test\Table\Mapper;
 
-use BladeOrm\Table\Mapper\PgDaterangeMapper;
-use BladeOrm\Value\DateRange;
+use Blade\Orm\Table\Mapper\PgDaterangeMapper;
+use Blade\Orm\Value\DateRange;
 
 require_once __DIR__ . '/BaseMapperTestCase.php';
 
 
 /**
- * @see \BladeOrm\Table\Mapper\PgDaterangeMapper
+ * @see \Blade\Orm\Table\Mapper\PgDaterangeMapper
  */
 class DaterangeMapperTest extends BaseMapperTestCase
 {
