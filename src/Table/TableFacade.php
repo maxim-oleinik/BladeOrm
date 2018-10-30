@@ -34,9 +34,9 @@ class TableFacade
         }
 
         $repo = self::getRepo();
-        if ($repo->has($model)) {
-            return $repo->table($model);
+        if ($repo->hasModel($model)) {
+            return $repo->get($model);
         }
-        return $repo->get($model);
+        return $repo->table($model);
     }
 }
