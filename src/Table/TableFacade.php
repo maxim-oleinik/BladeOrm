@@ -33,10 +33,16 @@ class TableFacade
             $model = get_class($model);
         }
 
-        $repo = self::getRepo();
-        if ($repo->hasModel($model)) {
-            return $repo->get($model);
-        }
-        return $repo->table($model);
+        return self::getRepo()->get($model);
+    }
+
+
+    /**
+     * @param  string $className
+     * @return \BladeOrm\Table
+     */
+    public static function table($className)
+    {
+        return self::getRepo()->table($className);
     }
 }

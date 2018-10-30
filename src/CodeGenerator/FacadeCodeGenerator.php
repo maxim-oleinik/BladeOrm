@@ -2,13 +2,11 @@
 
 use BladeOrm\Table\TablesRepository;
 
-/**
- * @see \BladeOrm\Test\CodeGenerator\FacadeCodeGeneratorTest
- */
 class FacadeCodeGenerator
 {
     private $definitionFileName;
     private $facadeFileName;
+    private $repoTraitFileName;
     private $templatesDir;
 
 
@@ -27,9 +25,6 @@ class FacadeCodeGenerator
      */
     public function getFacadeFileName()
     {
-        if (!$this->facadeFileName) {
-            throw new \RuntimeException(__METHOD__.": Facade file name not set");
-        }
         return $this->facadeFileName;
     }
 
@@ -39,6 +34,22 @@ class FacadeCodeGenerator
     public function setFacadeFileName($facadeFileName)
     {
         $this->facadeFileName = $facadeFileName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRepoTraitFileName()
+    {
+        return $this->repoTraitFileName;
+    }
+
+    /**
+     * @param mixed $repoTraitFileName
+     */
+    public function setRepoTraitFileName($repoTraitFileName)
+    {
+        $this->repoTraitFileName = $repoTraitFileName;
     }
 
     /**
@@ -98,9 +109,11 @@ class FacadeCodeGenerator
     {
         $tplDef    = $this->_getTemplate('table_def.tpl');
         $tplFacade = $this->_getTemplate('table_facade.tpl');
+        $tplRepo   = $this->_getTemplate('repo_trait_method.tpl');
 
         $dataDef    = [];
         $dataFacade = [];
+        $dataRepo   = [];
 
         foreach ($repo->all() as $table) {
             $tableClass = get_class($table);
@@ -109,6 +122,16 @@ class FacadeCodeGenerator
 
             $modelClass = $table->getModelName();
             $modelAlias = str_replace('Table', '', $tableAlias);
+            if ($repo->hasModel($modelClass) && $repo->get($modelClass) === $table) {
+                $modelName = explode('\\', $modelClass);
+                $modelName = array_pop($modelName);
+                $method = 'get';
+                $object = $modelClass;
+            } else {
+                $method = 'table';
+                $modelName = $modelAlias;
+                $object = $tableClass;
+            }
 
             $queryClass = get_class($table->sql());
             $queryAlias = $tableAlias . 'Query';
@@ -128,26 +151,51 @@ class FacadeCodeGenerator
                 $tplFacade
             );
             $dataFacade[] = $str;
+
+            // Repo
+            $str = str_replace(
+                ['%TABLE_ALIAS%', '%MODEL_NAME%', '%METHOD%', '%OBJECT%'],
+                [$tableAlias, $modelName, $method, $object],
+                $tplRepo
+            );
+            $dataRepo[] = $str;
         }
 
-        $this->_save_definition(implode('', $dataDef));
-        $this->_save_facade(implode('', $dataFacade));
+        $this->_saveDefinition(implode('', $dataDef));
+        $this->_saveFacade(implode('', $dataFacade));
+        $this->_saveRepo(implode('', $dataRepo));
     }
 
-    private function _save_definition($data)
+    private function _saveDefinition($data)
     {
         file_put_contents($this->getDefinitionFileName(), "<?php\n\n".$data);
     }
 
-    private function _save_facade($data)
+    private function _saveFacade($data)
     {
-        $tpl = $this->_getTemplate('table_facade_class.tpl');
-        $str = str_replace(
-            ['%FACADE_CLASS%', '%DATA%'],
-            ['T', $data],
-            $tpl
-        );
+        if ($filename = $this->getFacadeFileName()) {
+            $tpl = $this->_getTemplate('table_facade_class.tpl');
+            $str = str_replace(
+                ['%FACADE_CLASS%', '%DATA%'],
+                ['T', $data],
+                $tpl
+            );
 
-        file_put_contents($this->getFacadeFileName(), $str);
+            file_put_contents($filename, $str);
+        }
+    }
+
+    private function _saveRepo($data)
+    {
+        if ($fileName = $this->getRepoTraitFileName()) {
+            $tpl = $this->_getTemplate('repo_trait_class.tpl');
+            $str = str_replace(
+                ['%DATA%'],
+                [$data],
+                $tpl
+            );
+
+            file_put_contents($fileName, $str);
+        }
     }
 }

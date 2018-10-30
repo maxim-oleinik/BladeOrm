@@ -98,7 +98,7 @@ class TablesRepository
         $origName = $modelClassName;
 
         // Проверка на регистрацию родительских моделей
-        if (!$this->hasModel($modelClassName)) {
+        if (!$this->hasModel($modelClassName, false)) {
             $modelClassName = null;
             if ($parents = class_parents($origName)) {
                 foreach ($parents as $className) {
@@ -113,7 +113,7 @@ class TablesRepository
         }
 
         // Если только 1 таблица на модель зарегистрирована
-        if (\count($this->indexByModelName[$modelClassName]) === 1) {
+        if ($this->hasModel($modelClassName, true)) {
             $key = key($this->indexByModelName[$modelClassName]);
             $data = &$this->indexByModelName[$modelClassName][$key];
             if (empty($data['table'])) {
@@ -129,12 +129,13 @@ class TablesRepository
     /**
      * Has Model
      *
-     * @param  string $modelClass
+     * @param string $modelClass
+     * @param bool   $uniq
      * @return bool
      */
-    public function hasModel($modelClass): bool
+    public function hasModel($modelClass, $uniq = true): bool
     {
-        return isset($this->indexByModelName[$modelClass]);
+        return isset($this->indexByModelName[$modelClass]) && (!$uniq || \count($this->indexByModelName[$modelClass]) === 1);
     }
 
 
