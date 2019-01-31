@@ -483,7 +483,6 @@ abstract class Table
     {
         $values = $this->filterFields($item->toArray());
         if ($values) {
-
             $this->preSave($item, false);
             $this->_notify(self::EVENT_PRE_INSERT, $item);
             $this->_notify(self::EVENT_PRE_SAVE, $item);
@@ -515,6 +514,7 @@ abstract class Table
             ->values($mappedValues)
             ->returning(implode(',', (array)$this->getPrimaryKey()));
         $result = $this->getAdapter()->selectRow($sql);
+        $result = $this->mapFromDb($result);
         foreach ($result as $key => $value) {
             $item->push($key, $value);
         }
