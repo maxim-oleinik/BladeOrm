@@ -6,7 +6,7 @@ use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 use Blade\Orm\Value\DateTime;
 
-class Item extends Model
+class TableInsertValueObjetInPrimaryTestItem extends Model
 {
     /**
      * @var array - Трансформеры
@@ -24,7 +24,7 @@ class ThisTestTable extends Table
     /**
      * @var string - Модель
      */
-    protected $modelName = Item::class;
+    protected $modelName = TableInsertValueObjetInPrimaryTestItem::class;
 
     protected $casts = [
         'id' => Table\Mapper\DatetimeMapper::class,
@@ -43,7 +43,7 @@ class TableInsertValueObjetInPrimaryTest extends \PHPUnit_Framework_TestCase
     {
         $table = new ThisTestTable(new DbAdapter($conn = new TestStubDbConnection()));
         $date = '2017-01-31 13:32:00';
-        $item = new Item([
+        $item = new TableInsertValueObjetInPrimaryTestItem([
             'id' => new DateTime($date),
         ]);
 
