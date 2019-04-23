@@ -4,22 +4,6 @@ use Blade\Database\DbAdapter;
 use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 
-class Table1TestTable extends Table
-{
-    protected $tableName = 'db_table_name1';
-    protected $tableAlias = 'tbl';
-}
-
-class Table2TestTable extends Table
-{
-    protected $tableName  = 'db_table_name2';
-}
-
-class Table3TestTable extends Table
-{
-    protected $tableName  = 'db_table_name3';
-}
-
 /**
  * @see \Blade\Orm\Table
  */
@@ -33,16 +17,23 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $db = new DbAdapter(new TestStubDbConnection());
 
         // Таблица с Алиасом
-        $t1 = new Table1TestTable($db);
+        $t1  = new class($db) extends Table {
+            protected $tableName = 'db_table_name1';
+            protected $tableAlias = 'tbl';
+        };
         $this->assertEquals('db_table_name1', $t1->getTableName());
         $this->assertEquals('tbl', $t1->getTableAlias());
 
         // Таблица БЕЗ алиаса - генерация в t1
-        $t2 = new Table2TestTable($db);
+        $t2  = new class($db) extends Table {
+            protected $tableName  = 'db_table_name2';
+        };
         $this->assertRegExp('/t[0-9]+/', $t2->getTableAlias());
         $this->assertSame($t2->getTableAlias(), $t2->getTableAlias(), 'Алиас не генерится заново');
 
-        $t3 = new Table3TestTable($db);
+        $t3 = new class($db) extends Table {
+            protected $tableName  = 'db_table_name3';
+        };
         $this->assertRegExp('/t[0-9]+/', $t3->getTableAlias());
         $this->assertNotEquals($t2->getTableAlias(), $t3->getTableAlias(), 'Алиасы не повторяются у таблиц');
     }

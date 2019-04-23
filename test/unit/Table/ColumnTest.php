@@ -4,7 +4,6 @@ use Blade\Orm\Table\Column;
 use Blade\Orm\Table\Mapper\IntMapper;
 use Blade\Orm\Table\Mapper\MapperInterface;
 
-
 /**
  * @see \Blade\Orm\Table\Column
  */
@@ -119,5 +118,4 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($expected, $column->fromDb($input));
         }
     }
-
 }

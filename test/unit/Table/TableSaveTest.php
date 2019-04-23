@@ -5,18 +5,6 @@ use Blade\Orm\Model;
 use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
 
-class Item extends Model
-{
-    protected $allowGetterMagic = true;
-}
-
-class BaseTableSaveTestTable extends Table
-{
-    protected $tableName  = 'test';
-    protected $tableAlias = 't';
-    protected $availableFields = ['code', 'name', 'deleted_at'];
-}
-
 class BaseTableSaveEventListener {
     private $logger;
     private $type;
@@ -43,7 +31,7 @@ class BaseTableSaveEventLogger {
 class TableSaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var BaseTableSaveTestTable
+     * @var Table
      */
     private $table;
 
@@ -57,7 +45,13 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->eventLogger = new BaseTableSaveEventLogger;
-        $this->table = new BaseTableSaveTestTable(new DbAdapter($this->conn = new TestStubDbConnection()));
+
+        $this->table = new class(new DbAdapter($this->conn = new TestStubDbConnection())) extends Table
+        {
+            protected $tableName  = 'test';
+            protected $tableAlias = 't';
+            protected $availableFields = ['code', 'name', 'deleted_at'];
+        };
         $this->table->addListener(Table::EVENT_PRE_SAVE,    new BaseTableSaveEventListener('pre_save', $this->eventLogger));
         $this->table->addListener(Table::EVENT_POST_SAVE,   new BaseTableSaveEventListener('post_save', $this->eventLogger));
         $this->table->addListener(Table::EVENT_PRE_INSERT,  new BaseTableSaveEventListener('pre_insert', $this->eventLogger));
@@ -73,7 +67,7 @@ class TableSaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testInsert()
     {
-        $item = new Item([
+        $item = new Model([
             'code' => 'Code',
             'name' => 'Name',
             'unknown' => 123,
