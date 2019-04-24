@@ -165,7 +165,7 @@ abstract class Table
      * @param string $eventName
      * @param Model  $item
      */
-    private function _notify($eventName, Model $item)
+    protected function notify($eventName, Model $item)
     {
         if (isset($this->listeners[$eventName])) {
             /** @var callable $listener */
@@ -492,8 +492,8 @@ abstract class Table
         $values = $this->filterFields($item->toArray());
         if ($values) {
             $this->preSave($item, false);
-            $this->_notify(self::EVENT_PRE_INSERT, $item);
-            $this->_notify(self::EVENT_PRE_SAVE, $item);
+            $this->notify(self::EVENT_PRE_INSERT, $item);
+            $this->notify(self::EVENT_PRE_SAVE, $item);
 
             // Событие могло изменить состояние объекта
             // и маппер может добавить поля
@@ -502,8 +502,8 @@ abstract class Table
                 $this->doInsert($insertValues, $item);
 
                 $this->postSave($item, false);
-                $this->_notify(self::EVENT_POST_INSERT, $item);
-                $this->_notify(self::EVENT_POST_SAVE, $item);
+                $this->notify(self::EVENT_POST_INSERT, $item);
+                $this->notify(self::EVENT_POST_SAVE, $item);
 
                 // Объединяем 2 набора полей на тот случай, если были виртуальные композитные поля
                 $item->resetModified($insertValues+$values);
@@ -542,8 +542,8 @@ abstract class Table
             // PreUpdate Event
             // Еще можно изменить состояние объекта перед сохранением
             $this->preSave($item, true);
-            $this->_notify(self::EVENT_PRE_UPDATE, $item);
-            $this->_notify(self::EVENT_PRE_SAVE, $item);
+            $this->notify(self::EVENT_PRE_UPDATE, $item);
+            $this->notify(self::EVENT_PRE_SAVE, $item);
 
             // Событие могло изменить состояние объекта
             $values = $this->filterFields($item->getValuesUpdated());
@@ -556,8 +556,8 @@ abstract class Table
                 // Данные уже сохранены в БД, но еще отмечены как Измененные
                 // Больше нельзя вносить изменения в состояние объекта
                 $this->postSave($item, true);
-                $this->_notify(self::EVENT_POST_UPDATE, $item);
-                $this->_notify(self::EVENT_POST_SAVE, $item);
+                $this->notify(self::EVENT_POST_UPDATE, $item);
+                $this->notify(self::EVENT_POST_SAVE, $item);
 
                 // Объединяем 2 набора полей на тот случай, если были виртуальные композитные поля
                 $item->resetModified($updateValues+$values);
@@ -612,7 +612,7 @@ abstract class Table
 
         $this->getAdapter()->execute($sql);
 
-        $this->_notify(self::EVENT_POST_DELETE, $item);
+        $this->notify(self::EVENT_POST_DELETE, $item);
     }
 
 
@@ -648,7 +648,7 @@ exception when foreign_key_violation then
 end $$
         ', $deleteQuery, $updateQuery));
 
-        $this->_notify(self::EVENT_POST_DELETE, $item);
+        $this->notify(self::EVENT_POST_DELETE, $item);
     }
 
 
