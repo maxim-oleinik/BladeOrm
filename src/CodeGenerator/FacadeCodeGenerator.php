@@ -2,23 +2,12 @@
 
 use Blade\Orm\Table\TablesRepository;
 
-class FacadeCodeGenerator
+class FacadeCodeGenerator extends BaseGenerator
 {
     private $definitionFileName;
     private $facadeFileName;
     private $repoTraitFileName;
-    private $templatesDir;
 
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->templatesDir = [
-            1 => __DIR__.'/templates',
-        ];
-    }
 
     /**
      * @return string - Файл фасада
@@ -71,45 +60,15 @@ class FacadeCodeGenerator
         $this->definitionFileName = $definitionFileName;
     }
 
-    /**
-     * Установить директорию с кастомными шаблонами
-     *
-     * @param string $path
-     */
-    public function setTemplatesDir($path)
-    {
-        $this->templatesDir[0] = $path;
-    }
-
-    /**
-     * Получить шаблон
-     * Ищет в кастомной директории, потом в системной
-     *
-     * @param  string $fileName
-     * @return bool|string
-     */
-    private function _getTemplate($fileName)
-    {
-        // системная директория должна быть последней
-        ksort($this->templatesDir);
-        foreach ($this->templatesDir as $dirPath) {
-            $filePath = $dirPath . DIRECTORY_SEPARATOR . $fileName;
-            if (is_file($filePath)) {
-                return file_get_contents($filePath);
-            }
-        }
-        throw new \RuntimeException(__METHOD__.": Template file `{$fileName}` not found in directories: ".implode('; ', $this->templatesDir));
-    }
-
 
     /**
      * @param \Blade\Orm\Table\TablesRepository $repo
      */
     public function generate(TablesRepository $repo)
     {
-        $tplDef    = $this->_getTemplate('table_def.tpl');
-        $tplFacade = $this->_getTemplate('table_facade.tpl');
-        $tplRepo   = $this->_getTemplate('repo_trait_method.tpl');
+        $tplDef    = $this->getTemplate('table_def.tpl');
+        $tplFacade = $this->getTemplate('table_facade.tpl');
+        $tplRepo   = $this->getTemplate('repo_trait_method.tpl');
 
         $dataDef    = [];
         $dataFacade = [];
@@ -174,7 +133,7 @@ class FacadeCodeGenerator
     private function _saveFacade($data)
     {
         if ($filename = $this->getFacadeFileName()) {
-            $tpl = $this->_getTemplate('table_facade_class.tpl');
+            $tpl = $this->getTemplate('table_facade_class.tpl');
             $str = str_replace(
                 ['%FACADE_CLASS%', '%DATA%'],
                 ['T', $data],
@@ -188,7 +147,7 @@ class FacadeCodeGenerator
     private function _saveRepo($data)
     {
         if ($fileName = $this->getRepoTraitFileName()) {
-            $tpl = $this->_getTemplate('repo_trait_class.tpl');
+            $tpl = $this->getTemplate('repo_trait_class.tpl');
             $str = str_replace(
                 ['%DATA%'],
                 [$data],
