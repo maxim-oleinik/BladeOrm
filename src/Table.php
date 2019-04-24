@@ -1,6 +1,7 @@
 <?php namespace Blade\Orm;
 
 use Blade\Database\DbAdapter;
+use Blade\Database\Sql\SqlFunc;
 use Blade\Orm\Exception\ModelNotFoundException;
 use Blade\Orm\Table\Column;
 use Blade\Orm\Table\Mapper\MapperInterface;
@@ -379,9 +380,10 @@ abstract class Table
      */
     public function refresh(Model $item)
     {
-        $pk = $item->get($this->getPrimaryKey());
-        CacheRepository::clear($this->getTableName(), $pk);
-        return $this->findOneByPk($pk);
+        // Выборка в обход кеша
+        $item = $this->sql()->filterBy($this->extractPkValues($item))->fetchModel(true);
+        $this->cache([$item]);
+        return $item;
     }
 
 
@@ -421,7 +423,12 @@ abstract class Table
     public function cache(array $items)
     {
         foreach ($items as $item) {
-            CacheRepository::add($this->getTableName(), $item->get($this->getPrimaryKey()), $item);
+            if (is_array($this->primaryKey)) {
+                $key = CacheRepository::key($this->extractPkValues($item));
+            } else {
+                $key = $item->get($this->primaryKey);
+            }
+            CacheRepository::add($this->getTableName(), $key, $item);
         }
     }
 
@@ -564,10 +571,10 @@ abstract class Table
      */
     protected function doUpdate(array $mappedValues, Model $item)
     {
-        $sql = $this->sql()->update()->values($mappedValues);
-        foreach ((array)$this->getPrimaryKey() as $pk) {
-            $sql->andWhere($sql->col($pk)."='%s'", $item->get($pk));
-        }
+        $sql = $this->sql()->update()
+            ->values($mappedValues)
+            ->filterBy($this->extractPkValues($item));
+
         $this->getAdapter()->execute($sql);
     }
 
@@ -599,12 +606,9 @@ abstract class Table
      */
     public function delete(Model $item)
     {
-        $id = $item->get($this->getPrimaryKey());
-        if (!$id) {
-            throw new \InvalidArgumentException(get_class($this)."::".__FUNCTION__.": ID is empty");
-        }
+        $sql = $this->sql()->delete()
+            ->filterBy($this->extractPkValues($item));
 
-        $sql = $this->sql(__METHOD__)->filterByPk($id)->delete();
         $this->getAdapter()->execute($sql);
 
         $this->_notify(self::EVENT_POST_DELETE, $item);
@@ -631,16 +635,41 @@ abstract class Table
      */
     public function softDeleteOnViolation(Model $item)
     {
-        $pkName  = $this->getPrimaryKey();
+        $pkValues = $this->extractPkValues($item);
+        $deleteQuery = $this->sql()->delete()->filterBy($pkValues);
+        $updateQuery = $this->sql()->update()->filterBy($pkValues)->values(['deleted_at' => new SqlFunc('now()')]);
+
         $this->getAdapter()->execute(sprintf('
-            do $$ begin
-                delete from %1$s where %2$s=%3$d;
-            exception when foreign_key_violation then
-                update %1$s set deleted_at=now() where %2$s=%3$d;
-            end $$
-        ', $this->getTableName(), $pkName, $item->get($pkName)));
+do $$ begin
+    %s;
+exception when foreign_key_violation then
+    %s;
+end $$
+        ', $deleteQuery, $updateQuery));
 
         $this->_notify(self::EVENT_POST_DELETE, $item);
+    }
+
+
+    /**
+     * Получить значение первичного ключа у Модели
+     *
+     * @param Model $item
+     * @param bool  $origin - Вернуть оригинальные значения (если были изменены)
+     * @return array
+     */
+    public function extractPkValues(Model $item, $origin = true): array
+    {
+        $result = [];
+        foreach ((array)$this->getPrimaryKey() as $fieldName) {
+            // Значения первичных ключей берем из Предыдущих значений, если они были изменены
+            if ($origin) {
+                $result[$fieldName] = $item->getValueOrig($fieldName);
+            } else {
+                $result[$fieldName] = $item->get($fieldName);
+            }
+        }
+        return $this->mapToDb($result);
     }
 
 

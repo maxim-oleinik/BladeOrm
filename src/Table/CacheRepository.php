@@ -87,4 +87,17 @@ class CacheRepository
             self::$cache = [];
         }
     }
+
+
+    /**
+     * @param  mixed $key
+     * @return string
+     */
+    public static function key($key): string
+    {
+        if (is_array($key)) {
+            $key = implode(',', array_keys($key)) . ':' . implode(',', array_values($key));
+        }
+        return $key;
+    }
 }

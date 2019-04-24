@@ -88,6 +88,9 @@ class Query extends \Blade\Database\Sql\SqlBuilder
         $ids = (array) $ids;
 
         $pk = $this->getTable()->getPrimaryKey();
+        if (is_array($pk)) {
+            throw new \RuntimeException(get_class($this).'::'.__FUNCTION__.': Composite PK not allowed');
+        }
         // Если в базе PK INT, а мы передаем текст, получим SQL-ошибку, надо привести к типу, который заявлен в таблице
         $ids = array_filter(array_map(function ($value) use ($pk) {
             return $this->getTable()->mapToDb([$pk => $value])[$pk];

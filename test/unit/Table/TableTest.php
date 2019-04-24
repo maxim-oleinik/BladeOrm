@@ -10,6 +10,17 @@ use Blade\Database\Connection\TestStubDbConnection;
 class TableTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Название таблицы в toString
+     */
+    public function testToString()
+    {
+        $table = new class(new DbAdapter(new TestStubDbConnection())) extends Table {
+            protected $tableName = 'db_table_name';
+        };
+        $this->assertSame('db_table_name', (string)$table);
+    }
+
+    /**
      * Генерация Алиаса, если не указан
      */
     public function testAliasGeneration()
