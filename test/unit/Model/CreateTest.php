@@ -2,22 +2,16 @@
 
 use Blade\Orm\Model;
 
-
 class CreateTestModel extends Model
 {
-    protected $defaults = [
-        'def_null'  => null,
-        'def_zero'  => 0,
-        'def_empty' => '',
-        'def_false' => false,
-    ];
-
-    /**
-     * @return array
-     */
-    public function getDefaults()
+    public function defaults(): array
     {
-        return $this->defaults;
+        return [
+            'def_null'  => null,
+            'def_zero'  => 0,
+            'def_empty' => '',
+            'def_false' => false,
+        ];
     }
 }
 
@@ -32,11 +26,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithDefaults()
     {
         $m = new CreateTestModel();
-        $this->assertSame($m->getDefaults(), $m->toArray());
+        $this->assertCount(4, $m->defaults());
+        $this->assertSame($m->defaults(), $m->toArray());
         $this->assertTrue($m->isNew(), 'Новый');
 
         $m = new CreateTestModel($input = ['def_null' => 'new value']);
-        $expected = array_merge($m->getDefaults(), $input);
+        $expected = array_merge($m->defaults(), $input);
         $this->assertSame($expected, $m->toArray());
         $this->assertTrue($m->isNew(), 'Новый');
 
@@ -45,5 +40,4 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($input, $m->toArray(), 'Дефолты не подгрузились');
         $this->assertFalse($m->isNew(), 'НЕ Новый');
     }
-
 }

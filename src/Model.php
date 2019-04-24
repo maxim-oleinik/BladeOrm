@@ -41,6 +41,8 @@ class Model
 
     /**
      * @var array - Значения по умолчанию для создания нового объекта
+     * @deprecated
+     * @see defaults()
      */
     protected $defaults = [];
 
@@ -114,8 +116,10 @@ class Model
     public function __construct(array $values = [], $isNew = true)
     {
         $this->isNew((bool)$isNew);
-        if ($this->isNew() && $this->defaults) {
-            $values = array_merge($this->defaults, $values);
+        if ($isNew) {
+            if ($defaults = $this->defaults()) {
+                $values = array_merge($defaults, $values);
+            }
         }
         $this->values = $values;
         foreach ($values as $key => $value) {
@@ -128,6 +132,14 @@ class Model
                 $this->_set_update($key, $value);
             }
         }
+    }
+
+    /**
+     * @return array - Значения по умолчанию для создания нового объекта
+     */
+    public function defaults(): array
+    {
+        return $this->defaults;
     }
 
 
