@@ -7,9 +7,9 @@ interface TableFactoryInterface
     /**
      * Создать таблицу
      *
-     * @param string $tableClassName
-     * @param string $modelClassName
-     * @param string $queryClassName
+     * @param  string $tableClassName
+     * @param  string $modelClassName
+     * @param  string $queryClassName
      * @return Table
      */
     public function make($tableClassName, $modelClassName = null, $queryClassName = null): Table;

@@ -8,7 +8,7 @@ use Blade\Orm\Value\GeoPoint;
 class GeoPointMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return null|string
      */
     public function toDb($value)
@@ -25,7 +25,7 @@ class GeoPointMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return GeoPoint
      */
     public function fromDb(&$value)

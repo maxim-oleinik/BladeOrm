@@ -34,7 +34,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     }
 
     /**
-     * @param Table $table - Таблица
+     * @param  Table $table - Таблица
      * @return $this
      */
     public function setTable(Table $table)
@@ -55,7 +55,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     }
 
     /**
-     * @param int $minutes
+     * @param  int $minutes
      * @return $this
      */
     public function withCache($minutes)
@@ -109,7 +109,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     /**
      * Добавить простые фильтры по полям основной таблицы
      *
-     * @param array $filters
+     * @param  array $filters
      * @return $this
      */
     public function filterBy(array $filters)
@@ -127,7 +127,7 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     /**
      * Получить список объектов у Таблицы
      *
-     * @param string $indexBy - Проиндексировать массив по указанному полю
+     * @param  string $indexBy - Проиндексировать массив по указанному полю
      * @return \Blade\Orm\Model[]
      */
     public function fetchModelsList($indexBy = null)

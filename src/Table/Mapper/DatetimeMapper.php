@@ -10,7 +10,7 @@ use Blade\Orm\Value\DateTimeNull;
 class DatetimeMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return null|string
      */
     public function toDb($value)
@@ -27,7 +27,7 @@ class DatetimeMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return DateTime|DateTimeNull
      */
     public function fromDb(&$value)

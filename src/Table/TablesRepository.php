@@ -129,8 +129,8 @@ class TablesRepository
     /**
      * Has Model
      *
-     * @param string $modelClass
-     * @param bool   $uniq
+     * @param  string $modelClass
+     * @param  bool   $uniq
      * @return bool
      */
     public function hasModel($modelClass, $uniq = true): bool

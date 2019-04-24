@@ -15,9 +15,9 @@ class CacheRepository
     /**
      * Получить/сохранить значение в кеше
      *
-     * @param string   $table - Название таблицы
-     * @param string   $key   - Ключ, ID записи
-     * @param callable $func  - Функция, которая найдет строку в БД
+     * @param  string   $table - Название таблицы
+     * @param  string   $key   - Ключ, ID записи
+     * @param  callable $func  - Функция, которая найдет строку в БД
      * @return mixed|null
      */
     public static function item($table, $key, callable $func)
@@ -33,9 +33,9 @@ class CacheRepository
     /**
      * Добавить
      *
-     * @param string $table - Название таблицы
-     * @param string $key   - Ключ, ID записи
-     * @param mixed  $item  - Строка таблицы
+     * @param string       $table - Название таблицы
+     * @param string|array $key   - Ключ, ID записи
+     * @param mixed        $item  - Строка таблицы
      */
     public static function add($table, $key, $item)
     {
@@ -49,8 +49,8 @@ class CacheRepository
     /**
      * Проверить
      *
-     * @param string $table - Название таблицы
-     * @param string $key   - Ключ, ID записи
+     * @param  string $table - Название таблицы
+     * @param  string $key   - Ключ, ID записи
      * @return bool
      */
     public static function has($table, $key)
@@ -62,8 +62,8 @@ class CacheRepository
     /**
      * Получить
      *
-     * @param string $table - Название таблицы
-     * @param string $key   - Ключ, ID записи
+     * @param  string $table - Название таблицы
+     * @param  string $key   - Ключ, ID записи
      * @return mixed|null
      */
     public static function get($table, $key)
@@ -76,6 +76,9 @@ class CacheRepository
 
     /**
      * Очистить все
+     *
+     * @param string $table
+     * @param string $key
      */
     public static function clear($table = null, $key = null)
     {

@@ -25,8 +25,8 @@ class CacheDecoratorTable
     /**
      * Конструктор
      *
-     * @param Table $table
-     * @param callable               $cacheDriverFactory
+     * @param Table    $table
+     * @param callable $cacheDriverFactory
      */
     public function __construct(Table $table, callable $cacheDriverFactory)
     {
@@ -120,8 +120,8 @@ class CacheDecoratorTable
     /**
      * Поиск в кеше, если не находит - ищет в базе и сохраняет в кеш
      *
-     * @param Query $sql
-     * @param callable               $func
+     * @param  Query    $sql
+     * @param  callable $func
      * @return Model[]
      */
     private function _cache_search(Query $sql, callable $func)
@@ -152,7 +152,7 @@ class CacheDecoratorTable
     /**
      * Разобрать модель на записи из БД
      *
-     * @param Model[] $values
+     * @param  Model[] $values
      * @return array
      */
     private function _sleep(array $values)
@@ -168,7 +168,7 @@ class CacheDecoratorTable
     /**
      * Собрать модели
      *
-     * @param array $input
+     * @param  array $input
      * @return array
      */
     private function _wakeup(array $input)

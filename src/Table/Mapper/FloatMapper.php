@@ -4,7 +4,7 @@
 class FloatMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return float
      */
     public function toDb($value)
@@ -13,7 +13,7 @@ class FloatMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return float|null
      */
     public function fromDb(&$value)

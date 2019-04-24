@@ -69,7 +69,7 @@ class GeoPoint
     /**
      * расчет расстояния в км до точки
      *
-     * @param GeoPoint $point
+     * @param  GeoPoint $point
      * @return float
      */
     public function getDistance(GeoPoint $point)
@@ -90,7 +90,7 @@ class GeoPoint
     /**
      * Радиан из градуса
      *
-     * @param double $degree
+     * @param  double $degree
      * @return float|int
      */
     private function _get_rad($degree)

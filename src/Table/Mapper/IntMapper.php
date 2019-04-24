@@ -4,7 +4,7 @@
 class IntMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return int
      */
     public function toDb($value)
@@ -13,7 +13,7 @@ class IntMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return int|null
      */
     public function fromDb(&$value)

@@ -4,7 +4,7 @@
 class JsonMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return string
      */
     public function toDb($value)
@@ -22,7 +22,7 @@ class JsonMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     public function fromDb(&$value)

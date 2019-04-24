@@ -24,7 +24,7 @@ class TableFacade
     }
 
     /**
-     * @param $model
+     * @param  $model
      * @return \Blade\Orm\Table
      */
     public static function get($model)

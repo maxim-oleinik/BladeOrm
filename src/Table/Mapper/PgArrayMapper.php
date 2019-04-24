@@ -7,7 +7,7 @@
 class PgArrayMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return string
      */
     public function toDb($value)
@@ -30,7 +30,7 @@ class PgArrayMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     public function fromDb(&$value)

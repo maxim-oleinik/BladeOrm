@@ -16,7 +16,7 @@ interface MapperInterface
      * Конвертировать значение из БД
      * - должен уметь отрабатывать входящий null и преобразовывать его в валидное значение
      *
-     * @param string $value
+     * @param  string $value
      * @return mixed
      */
     public function fromDb(&$value);

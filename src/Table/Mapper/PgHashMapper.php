@@ -9,7 +9,7 @@ use Blade\Database\Sql\SqlBuilder;
 class PgHashMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return \Blade\Database\Sql\SqlFunc
      */
     public function toDb($value)
@@ -39,7 +39,7 @@ class PgHashMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     public function fromDb(&$value)

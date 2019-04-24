@@ -1,6 +1,5 @@
 <?php namespace Blade\Orm;
 
-
 /**
  * @see \Blade\Orm\Test\Model\CreateTest
  * @see \Blade\Orm\Test\Model\ForceSettersGettersTest
@@ -53,6 +52,7 @@ class Model
     /**
      * Геттеры назначенные на указанные поля. Кидает исключение, если пытается получить свойство мимо геттера
      * Назначение: заставить явно использовать геттер (для важных полей или там где возможна путаница с названиями)
+     *
      * @see BaseModel::get()
      *
      * @var array - KEY => METHOD
@@ -62,6 +62,7 @@ class Model
     /**
      * Сеттеры назначенные на указанные поля.
      * Вызваются в set() и update()
+     *
      * @see BaseModel::_set_resolved()
      *
      * @var array - KEY => METHOD
@@ -81,8 +82,7 @@ class Model
      *   'field' => ['ThisModelClass', '_set_col_callable'],
      *   'field' => ['trim', ['ThisModelClass', '_set_col_callable']],
      *   'field' => [\DateTime::class], // Может принимать значения только указанного класса
-     *
-     * все типы, см в  @see _set_transform()
+     * все типы, см в  @see _setTransform()
      */
     protected $transformers = [];
 
@@ -234,7 +234,7 @@ class Model
      * SET + проверка наличия сеттера
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool - Изменилось ли значение
      */
@@ -247,7 +247,7 @@ class Model
      * SET use Setter
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool - Изменилось ли значение
      */
@@ -336,8 +336,8 @@ class Model
      * SET attribute value
      * Преобразует значения - set_mutators
      *
-     * @param string $field
-     * @param mixed $value
+     * @param  string $field
+     * @param  mixed  $value
      * @return mixed - Новое значение после преобразования
      */
     private function _set_transform($field, $value)
@@ -451,7 +451,7 @@ class Model
      * НЕ использовать в других случаях!
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function push($field, $value)
     {
@@ -478,7 +478,7 @@ class Model
     // ------------------------------------------------------------------------
 
     /**
-     * @param $field
+     * @param  $field
      * @return bool
      */
     public function __isset($field)
@@ -489,8 +489,8 @@ class Model
     /**
      * Присутствует ли в объекте указанное поле
      *
-     * @param string $field
-     * @param bool   $checkEmpty - Если найдено, то проверить, что не пустое
+     * @param  string $field
+     * @param  bool   $checkEmpty - Если найдено, то проверить, что не пустое
      * @return bool
      */
     public function has($field, $checkEmpty = false)
@@ -582,7 +582,7 @@ class Model
     /**
      * Получить список обновленных значений
      *
-     * @param array $filterFields
+     * @param  array $filterFields
      * @return array
      */
     public function getValuesUpdated(array $filterFields = [])
@@ -601,7 +601,7 @@ class Model
     /**
      * Список предыдущих значений
      *
-     * @param array $filterFields
+     * @param  array $filterFields
      * @return array
      */
     public function getValuesOld(array $filterFields = [])
@@ -668,7 +668,7 @@ class Model
 
 
     /**
-     * @param $message
+     * @param  string $message
      * @return string
      */
     private function _error_mess($message)

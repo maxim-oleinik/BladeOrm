@@ -9,7 +9,7 @@ use Blade\Orm\Value\DateRange;
 class PgDaterangeMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return null|string
      */
     public function toDb($value)
@@ -28,7 +28,7 @@ class PgDaterangeMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return null|\Blade\Orm\Value\DateRange
      */
     public function fromDb(&$value)

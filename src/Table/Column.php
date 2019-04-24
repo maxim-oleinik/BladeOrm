@@ -64,7 +64,7 @@ class Column implements MapperInterface
     /**
      * To DB
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return mixed|null
      */
     public function toDb($value)
@@ -84,7 +84,7 @@ class Column implements MapperInterface
     /**
      * From DB
      *
-     * @param string $value
+     * @param  string $value
      * @return mixed
      */
     public function fromDb(&$value)

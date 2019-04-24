@@ -7,7 +7,7 @@
 class StringMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return string
      */
     public function toDb($value)
@@ -16,7 +16,7 @@ class StringMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return bool|null
      */
     public function fromDb(&$value)

@@ -134,8 +134,8 @@ abstract class Table
 
 
     /**
-     * @param string   $eventName
-     * @param callable $listener
+     * @param  string   $eventName
+     * @param  callable $listener
      * @return $this
      */
     public function addListener($eventName, callable $listener)
@@ -247,7 +247,7 @@ abstract class Table
     /**
      * Model
      *
-     * @param array $props
+     * @param  array $props
      * @return Model
      */
     public function makeModel(array $props)
@@ -263,8 +263,8 @@ abstract class Table
     /**
      * Find LIST
      *
-     * @param string $sql
-     * @param string $indexBy - Название поле, по которому проиндексировать выборку
+     * @param  string $sql
+     * @param  string $indexBy - Название поле, по которому проиндексировать выборку
      * @return Model[]
      */
     public function findList($sql, $indexBy = null)
@@ -289,8 +289,8 @@ abstract class Table
      * Find ONE
      *
      * @throws ModelNotFoundException
-     * @param SqlBuilder $sql
-     * @param bool       $exception
+     * @param  SqlBuilder $sql
+     * @param  bool       $exception
      * @return false|Model
      */
     public function findOne(SqlBuilder $sql, $exception = false)
@@ -312,8 +312,8 @@ abstract class Table
     /**
      * Найти запись по первичному ключу
      *
-     * @param int  $id
-     * @param bool $exception
+     * @param  int  $id
+     * @param  bool $exception
      * @return false|Model
      */
     public function findOneByPk($id, $exception = true)
@@ -390,7 +390,7 @@ abstract class Table
     /**
      * SQL
      *
-     * @param string $label
+     * @param  string $label
      * @return Query
      */
     public function sql($label = null)
@@ -469,7 +469,7 @@ abstract class Table
     /**
      * Отфильтровать только те поля, которые использует эта таблица
      *
-     * @param array $input
+     * @param  array $input
      * @return array
      */
     public function filterFields(array $input)
@@ -654,8 +654,8 @@ end $$
     /**
      * Получить значение первичного ключа у Модели
      *
-     * @param Model $item
-     * @param bool  $origin - Вернуть оригинальные значения (если были изменены)
+     * @param  Model $item
+     * @param  bool  $origin - Вернуть оригинальные значения (если были изменены)
      * @return array
      */
     public function extractPkValues(Model $item, $origin = true): array
@@ -677,7 +677,7 @@ end $$
     // ------------------------------------------------------------------------
 
     /**
-     * @param string $aliasOrClass
+     * @param  string $aliasOrClass
      * @return \Blade\Orm\Table\Mapper\MapperInterface
      */
     public static function getMapper($aliasOrClass)
@@ -709,7 +709,7 @@ end $$
     /**
      * MAP: Read
      *
-     * @param array $values
+     * @param  array $values
      * @return array
      */
     public function mapFromDb(array $values)

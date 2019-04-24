@@ -7,7 +7,7 @@
 class PgBoolMapper implements MapperInterface
 {
     /**
-     * @param mixed $value
+     * @param  mixed $value
      * @return string
      */
     public function toDb($value)
@@ -20,7 +20,7 @@ class PgBoolMapper implements MapperInterface
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return bool|null
      */
     public function fromDb(&$value)
