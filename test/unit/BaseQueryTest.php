@@ -102,6 +102,7 @@ class BaseQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/*{$label}*/\n".$q, $this->conn->log[1], '44 - уже не выбирается из базы');
     }
 
+
     /**
      * FilterBy
      */

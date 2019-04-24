@@ -26,7 +26,8 @@ class TestModelForTransformTest extends Model
     }
 }
 
-class CustomDateTime extends \DateTime {
+class CustomDateTime extends \DateTime
+{
     public function __toString()
     {
         return (string)$this->getTimestamp();

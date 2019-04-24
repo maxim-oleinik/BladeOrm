@@ -58,6 +58,7 @@ abstract class Table
     /**
      * Поля доступные для INSERT/UPDATE
      * Если указано, то в запрос идут только эти поля
+     *
      * @var array
      */
     protected $availableFields = [];
@@ -300,12 +301,12 @@ abstract class Table
         $items = $this->findList($sql);
         if ($items) {
             return current($items);
-        } else {
-            if ($exception) {
-                throw new ModelNotFoundException($this, $sql->buildWhere(true));
-            }
-            return false;
         }
+
+        if ($exception) {
+            throw new ModelNotFoundException($this, $sql->buildWhere(true));
+        }
+        return false;
     }
 
 
@@ -324,13 +325,13 @@ abstract class Table
                 $sql = $this->sql(get_class($this).'::findOneByPk')->filterByPk($id);
                 return $this->findOne($sql, $exception);
             });
-
-        } elseif ($exception) {
-            throw new \InvalidArgumentException(get_class($this).'::'.__FUNCTION__.": ID is not given");
-
-        } else {
-            return false;
         }
+
+        if ($exception) {
+            throw new \InvalidArgumentException(get_class($this).'::'.__FUNCTION__.": ID is not given");
+        }
+
+        return false;
     }
 
 
