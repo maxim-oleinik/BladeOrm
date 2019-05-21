@@ -709,7 +709,46 @@ end $$
      */
     public function mapToDb(array $values)
     {
-        return $this->_mapValues($values, true);
+        $this->_initColumns();
+
+        // Композитные колонки в первую очередь
+        if ($this->compositeColumns) {
+            foreach ($this->compositeColumns as $column) {
+                $columnName = $column->getName();
+
+                // Если правила нет в наборе значений
+                if (!array_key_exists($columnName, $values)) {
+                    continue;
+                }
+
+                $expandedValues = $column->toDb($values[$columnName]);
+                if (!is_array($expandedValues)) {
+                    throw new \RuntimeException(__METHOD__ . ": expected array, got " . var_export($expandedValues, true));
+                }
+
+                // Удалить виртуальную колонку
+                unset($values[$columnName]);
+
+                // Добавить в набор значений новые поля
+                $values = $expandedValues + $values;
+            }
+        }
+
+        // Обычные колонки
+        if ($this->columns) {
+            foreach ($this->columns as $column) {
+                $columnName = $column->getName();
+
+                // Если правила нет в наборе значений
+                if (!array_key_exists($columnName, $values)) {
+                    continue;
+                }
+
+                $values[$columnName] = $column->toDb($values[$columnName]);
+            }
+        }
+
+        return $values;
     }
 
     /**
@@ -720,65 +759,30 @@ end $$
      */
     public function mapFromDb(array $values)
     {
-        return $this->_mapValues($values, false);
-    }
-
-    /**
-     * MAP
-     *
-     * @param  array $values
-     * @param  bool  $toDb
-     * @return array
-     */
-    private function _mapValues(array $values, $toDb = true)
-    {
         $this->_initColumns();
 
-        // В зависимости от направления преобразования поставим Композитные колонки либо в начало, либо в конец
-        if ($toDb) {
-            $columns = array_merge($this->compositeColumns, $this->columns);
-        } else {
-            $columns = array_merge($this->columns, $this->compositeColumns);
-        }
+        // Обычные колонки
+        if ($this->columns) {
+            foreach ($this->columns as $column) {
+                $columnName = $column->getName();
 
-        /** @var Column[] $columns */
-        foreach ($columns as $column) {
-            $columnName = $column->getName();
-
-            // Если составное поле
-            if ($column->isComposite()) {
-                if ($toDb) {
-                    // Если правила нет в наборе значений
-                    if (!array_key_exists($columnName, $values)) {
-                        continue;
-                    }
-                    $expandedValues = $column->toDb($values[$columnName]);
-                    if (!is_array($expandedValues)) {
-                        throw new \RuntimeException(__METHOD__.": expected array, got ".var_export($expandedValues, true));
-                    }
-                    // Удалить виртуальную колонку
-                    unset($values[$columnName]);
-                    $values = array_merge($values, $expandedValues);
-
-                } else {
-                    $value = $column->fromDb($values); // Маппер может изменить набор $values
-                    $values[$columnName] = $value;
-                }
-
-            // Обычное поле
-            } else {
                 // Если правила нет в наборе значений
                 if (!array_key_exists($columnName, $values)) {
                     continue;
                 }
                 $value = $values[$columnName];
-
-                if ($toDb) {
-                    $value = $column->toDb($value);
-                } else {
-                    $value = $column->fromDb($value);
-                }
+                $value = $column->fromDb($value);
                 $values[$columnName] = $value;
+            }
+        }
+
+        // Композитные колонки в конце
+        if ($this->compositeColumns) {
+            foreach ($this->compositeColumns as $column) {
+                // Если правила нет в наборе значений - не проверяем, т.к. его там НЕ может быть
+
+                $value = $column->fromDb($values); // Маппер может изменить набор $values (удалить примитивные)
+                $values[$column->getName()] = $value;
             }
         }
 
