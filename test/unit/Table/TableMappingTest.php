@@ -25,8 +25,11 @@ class TestTable extends Table
     protected $modelName = \Blade\Orm\Test\TableMappingTestModel::class;
 
     protected $casts = [
-        'col_upper'      => ['null', \Blade\Orm\Test\TestUpperMapper::class],
-        'col_multi'      => [\Blade\Orm\Test\TestMultiColumnMapper::class],
+        'col_upper' => ['null', \Blade\Orm\Test\TestUpperMapper::class],
+        'col_multi' => [\Blade\Orm\Test\TestMultiColumnMapper::class],
+        // пре/пост обработчики полей составного маппера
+        'code'      => 'int',
+        'name'      => 'json',
     ];
 
 }
@@ -59,7 +62,7 @@ class TestMultiColumnMapper implements \Blade\Orm\Table\Mapper\MultiColumnMapper
     {
         $params = explode(':', $value);
         return [
-            'name' => $params[1],
+            'name' => explode(',', $params[1]), // отдаем как массив на вторичную обработку через cast=json
             'code' => $params[0],
         ];
     }
@@ -68,9 +71,9 @@ class TestMultiColumnMapper implements \Blade\Orm\Table\Mapper\MultiColumnMapper
     {
         $values = array_merge([
             'code' => null,
-            'name' => null,
-        ],$values);
-        $result = $values['code'] . ':' . $values['name'];
+            'name' => [],
+        ], $values);
+        $result = $values['code'] . ':' . implode(',', $values['name']);
         unset($values['code'], $values['name']);
 
         return $result;
@@ -131,11 +134,15 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
     {
         $table = new TestTable(new DbAdapter(new TestStubDbConnection()));
 
+        $input = [
+            'name' => '["A","B"]', // в базе хранится как массив json
+            'code' => 21,
+        ];
+
         // Чтение
-        $m = $table->makeModel($input = ['name' => 'text', 'code'=>'21']);
-        $this->assertEquals(['col_multi'=>'21:text'], $m->toArray(), 'Составные поля удалены');
-        $this->assertEquals('21:text', $m->get('col_multi'), 'Сгруппированное виртуальное поле');
-        $this->assertEquals(['col_multi'=>'21:text'], $m->toArray(), 'Составные поля удалены');
+        $m = $table->makeModel($input);
+        $this->assertEquals(['col_multi'=>'21:A,B'], $m->toArray(), 'Составные поля удалены');
+        $this->assertEquals('21:A,B', $m->get('col_multi'), 'Сгруппированное виртуальное поле');
         $this->assertFalse($m->has('name'));
         $this->assertFalse($m->has('code'));
 
@@ -143,5 +150,4 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
         $values = $table->mapToDb($m->toArray());
         $this->assertSame($input, $values);
     }
-
 }

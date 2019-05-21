@@ -114,6 +114,11 @@ abstract class Table
      */
     private $columns;
 
+    /**
+     * @var Column[]
+     */
+    private $compositeColumns;
+
 
     // ------------------------------------------------------------------------
 
@@ -729,7 +734,15 @@ end $$
     {
         $this->_initColumns();
 
-        foreach ($this->columns as $column) {
+        // В зависимости от направления преобразования поставим Композитные колонки либо в начало, либо в конец
+        if ($toDb) {
+            $columns = array_merge($this->compositeColumns, $this->columns);
+        } else {
+            $columns = array_merge($this->columns, $this->compositeColumns);
+        }
+
+        /** @var Column[] $columns */
+        foreach ($columns as $column) {
             $columnName = $column->getName();
 
             // Если составное поле
@@ -779,8 +792,10 @@ end $$
     {
         if (null === $this->columns) {
             $this->columns = [];
+            $this->compositeColumns = [];
 
             if ($this->casts) {
+
                 // По всем правилам
                 foreach ($this->casts as $field => $types) {
                     $types  = (array)$types;
@@ -799,7 +814,11 @@ end $$
                         $column->setMapper($this->getMapper($alias));
                     }
 
-                    $this->columns[] = $column;
+                    if ($column->isComposite()) {
+                        $this->compositeColumns[] = $column;
+                    } else {
+                        $this->columns[] = $column;
+                    }
                 }
             }
         }
