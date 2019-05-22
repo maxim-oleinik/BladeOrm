@@ -8,6 +8,10 @@ class TestModelForIsModifiedTest extends Model
     protected $transformers = [
         'col_array' => 'array',
     ];
+
+    protected $forceSetters = [
+        'ob3' => false,
+    ];
 }
 
 class IsModifiedTestValueObject
@@ -281,14 +285,15 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
     {
         $ob1 = new IsModifiedTestValueObject(1);
         $ob2 = new IsModifiedTestValueObject(2);
-        $m  = new TestModelForIsModifiedTest(['ob1' => $ob1]);
+        $ob3 = new IsModifiedTestValueObject(3);
+        $m  = new TestModelForIsModifiedTest(['ob1' => $ob1, 'ob3' => $ob3]);
         $this->assertFalse($m->isDirty('ob1'), 'из конструктора - НЕ изменен');
         $m->set('ob2', $ob2);
         $this->assertEquals(['ob2' => null], $m->getValuesOld(), 'Предыдущего значения не было');
 
         // Меняем внутреннее состояние 1 объекта
         $ob1->setId(11);
-        // $m->set('ob1', $ob1); // можем НЕ уведомлять
+        $m->set('ob1', $ob1); // принудительно уведомляем родителя
         $this->assertTrue($m->isDirty('ob1'));
         $this->assertEquals([
             'ob1' => 'id:1', // Снапшот
@@ -322,6 +327,10 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($m->isDirty('ob1'));
         $this->assertEquals(['ob1' => 'id:11'], $m->getValuesOld(), 'Старое значение');
         $this->assertEquals(['ob1' => null], $m->getValuesUpdated());
+
+        // Меняем внутреннее состояние 3 объекта (запрещенного к прямому сету)
+        $ob3->setId(33);
+        $this->assertTrue($m->isDirty('ob3'));
     }
 
 

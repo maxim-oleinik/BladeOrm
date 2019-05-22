@@ -614,7 +614,7 @@ class Model
                 $value = $this->_get_value($field);
                 // Если вложенный объект изменил свое состояние, сетнуть его
                 if ((string)$value !== $this->objectSnapshots[$field]) {
-                    $this->_set_resolved($field, $value);
+                    $this->_set_resolved($field, $value, false);
                 }
             }
         }
