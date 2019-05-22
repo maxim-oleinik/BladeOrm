@@ -2,12 +2,10 @@
 
 use Blade\Orm\Model;
 
-
 class TestModelForSetGetTest extends Model
 {
     public $allowGetterMagic = true;
 }
-
 
 /**
  * @see Model
@@ -148,5 +146,4 @@ class SetGetTest extends \PHPUnit_Framework_TestCase
 
         $m->update(['unknown' => 1]);
     }
-
 }

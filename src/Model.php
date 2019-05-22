@@ -115,21 +115,28 @@ class Model
      */
     public function __construct(array $values = [], $isNew = true)
     {
+        // Заполнить дефолтами
         $this->isNew((bool)$isNew);
         if ($isNew) {
             if ($defaults = $this->defaults()) {
                 $values = array_merge($defaults, $values);
             }
         }
+
+        // Сохранить значения
         $this->values = $values;
+
+        // Пропустить через трансформеры и сеттеры, чтобы пометить isDirty
         foreach ($values as $key => $value) {
-            // В конструктор не может прийти объект из БД,
-            // а это выражение нужно только для того, чтобы "трансформировать" данные,
-            // которые пришли из БД и пометить их isDirty
-            if (is_object($value)) {
-                $this->_set_transform($key, $value);
-            } else {
+            if ($this->forceSetters && array_key_exists($key, $this->forceSetters)) {
+                $this->_set_resolved($key, $value, false);
+
+            } elseif ($this->transformers && array_key_exists($key, $this->transformers)) {
                 $this->_set_update($key, $value);
+
+            // если нет правил на объекты, то им обязательно надо сделать снимок
+            } elseif (is_object($value)) {
+                $this->_set_transform($key, $value);
             }
         }
     }
@@ -260,21 +267,44 @@ class Model
      *
      * @param string $field
      * @param mixed  $value
+     * @param bool   $exception - Кидать исключение, если Сеттер заблокирован
      *
      * @return bool - Изменилось ли значение
      */
-    private function _set_resolved($field, $value)
+    private function _set_resolved($field, $value, $exception = true)
     {
+        // Если есть Сеттер
         if ($this->forceSetters && array_key_exists($field, $this->forceSetters)) {
             $method = $this->forceSetters[$field];
+
+            // Если Сеттер заблокирован
             if (!$method) {
-                throw new \RuntimeException($this->_error_mess("set('{$field}') is forbidden"));
+                if ($exception) {
+                    throw new \RuntimeException($this->_error_mess("set('{$field}') is forbidden"));
+                }
+                // Иначе уходим в финальный set_update
+
+            // Вызов сеттера
+            } else {
+                // Если есть трансформер, вызываем его ДО сеттера
+                if (array_key_exists($field, $this->transformers)) {
+                    // обновляем с трансформером
+                    if ($this->_set_update($field, $value)) {
+                        // Если значение было изменено, то получим новое, для передачи в сеттер
+                        $value = $this->values[$field];
+                    }
+                }
+
+                // Вызов Сеттера
+                $this->$method($value);
+
+                // Вернуть изменилось ли значение
+                return array_key_exists($field, $this->modifiedValuesNew);
             }
-            $this->$method($value);
-            return array_key_exists($field, $this->modifiedValuesNew);
-        } else {
-            return $this->_set_update($field, $value);
+
         }
+
+        return $this->_set_update($field, $value);
     }
 
     /**
@@ -407,7 +437,7 @@ class Model
                         break;
 
                     case 'array':
-                        if ( !is_array($value)) {
+                        if (!is_array($value)) {
                             throw new \InvalidArgumentException($this->_error_mess("Expected array for `{$field}``"));
                         }
                         break;

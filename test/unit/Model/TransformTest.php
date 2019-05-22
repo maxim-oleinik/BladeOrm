@@ -1,23 +1,23 @@
 <?php namespace Blade\Orm\Test\Model;
 
 use Blade\Orm\Model;
-
+use Blade\Orm\Value\DateTime;
 
 class TestModelForTransformTest extends Model
 {
     protected $allowGetterMagic = true;
     protected $transformers = [
-        'col_int'  => 'int',
-        'col_trim' => 'trim',
-        'col_float' => 'float',
-        'col_bool' => 'bool',
-        'col_trim_lower' => ['trim', 'lower'],
-        'col_callable' => [TestModelForTransformTest::class, '_set_col_callable'],
+        'col_int'           => 'int',
+        'col_trim'          => 'trim',
+        'col_float'         => 'float',
+        'col_bool'          => 'bool',
+        'col_trim_lower'    => ['trim', 'lower'],
+        'col_callable'      => [TestModelForTransformTest::class, '_set_col_callable'],
         'col_trim_callable' => ['trim', [TestModelForTransformTest::class, '_set_col_callable']],
-        'col_trigger' => 'trim',
-        'col_date' => 'db_date',
-        'col_array' => 'array',
-        'col_custom' => CustomDateTime::class,
+        'col_trigger'       => 'trim',
+        'col_date'          => 'db_date',
+        'col_array'         => 'array',
+        'colObject'         => CustomDateTime::class,
     ];
 
     protected static function _set_col_callable($newValue)
@@ -68,7 +68,7 @@ class TransformTest extends \PHPUnit_Framework_TestCase
      */
     public function testDateMutator()
     {
-        $m = new TestModelForTransformTest(['col_date' => $date = new \DateTime('tomorrow')]);
+        $m = new TestModelForTransformTest(['col_date' => $date = new DateTime('tomorrow')]);
         $this->assertEquals($date->format('Y-m-d'), $m->col_date);
 
         $m->set('col_date', $date = '2016-02-01');
@@ -128,12 +128,11 @@ class TransformTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Повесть callable на set_mutators
+     * Трансформер callable
      */
     public function testSetMutatorsCallable()
     {
         $m = new TestModelForTransformTest([
-            'col_trim' => ' abc ',
             'col_callable' => 'val',
             'col_trim_callable' => '  val   ',
         ]);
@@ -176,23 +175,27 @@ class TransformTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomClass()
     {
-        $m = new TestModelForTransformTest(['col_custom' => null]);
-        $m->set('col_custom', $val = new CustomDateTime('-1 day'));
-        $this->assertSame($val, $m->col_custom);
+        $m = new TestModelForTransformTest(['colObject' => null]);
+        $m->set('colObject', $val = new CustomDateTime('-1 day'));
+        $this->assertSame($val, $m->colObject);
+        $this->assertTrue($m->isDirty('colObject'));
 
-        $m->set('col_custom', null);
-        $this->assertNull($m->col_custom);
+        // Установка из констуруктора
+        $m = new TestModelForTransformTest(['colObject' => new CustomDateTime()]);
+        $this->assertFalse($m->isDirty('colObject'), 'после всех преобразований - не измен');
+        $m->set('colObject', null);
+        $this->assertNull($m->colObject);
+        $this->assertTrue($m->isDirty('colObject'));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('CustomDateTime for field');
-        $m->set('col_custom', 'not date');
+        $m->set('colObject', 'not date');
     }
 
     public function testCustomClassErrorFromConstructor()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('CustomDateTime for field');
-        new TestModelForTransformTest(['col_custom' => 'not date']);
+        new TestModelForTransformTest(['colObject' => 'not date']);
     }
-
 }

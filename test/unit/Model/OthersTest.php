@@ -2,7 +2,6 @@
 
 use Blade\Orm\Model;
 
-
 class TestModelOthersTest extends Model
 {
     protected $transformers = [

@@ -2,7 +2,6 @@
 
 use Blade\Orm\Model;
 
-
 class TestModelForForceSettersGettersTest extends Model
 {
     protected $allowGetterMagic = true;
@@ -75,7 +74,7 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
     {
         $m = new TestModelForForceSettersGettersTest(['name' => 'aaa']);
 
-        $this->assertEquals('aaa', $m->name, 'Из конструктора сеттер не вызывается, а должен');
+        $this->assertEquals('set:aaa', $m->name, 'Из конструктора сеттер вызывается');
         $m->setName('bbb');
         $this->assertEquals('set:bbb', $m->name);
 
@@ -86,7 +85,7 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
     /**
      * ForceSetter если set()
      */
-    public function testForсeSetterIfSet()
+    public function testForceSetterIfSet()
     {
         $m = new TestModelForForceSettersGettersTest(['name' => 'aaa']);
         $m->set('name', 'bbb');
@@ -112,5 +111,4 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(\RuntimeException::class, 'forbidden');
         $m->set('hidden_field', 'new value');
     }
-
 }
