@@ -78,6 +78,11 @@ class TestMultiColumnMapper implements \Blade\Orm\Table\Mapper\MultiColumnMapper
 
         return $result;
     }
+
+    function isAvailableFromDb(array $input):bool
+    {
+        return array_key_exists('name', $input) && array_key_exists('code', $input);
+    }
 }
 
 
@@ -149,5 +154,26 @@ class TableMappingTest extends \PHPUnit_Framework_TestCase
         // Запись
         $values = $table->mapToDb($m->toArray());
         $this->assertSame($input, $values);
+    }
+
+
+    /**
+     * Групповой маппер на пустых данных
+     */
+    public function testMultiColumnMapperWithEmptyData()
+    {
+        $table = new TestTable(new DbAdapter(new TestStubDbConnection()));
+
+        // Пустой набор
+        $m = $table->mapFromDb([]);
+        $this->assertSame([], $m);
+
+        // Есть данные, но нет колонок для сборки
+        $m = $table->mapFromDb(['id' => 1]);
+        $this->assertSame(['id' => 1], $m);
+
+        // Есть данные, но только часть колонок для сборки
+        $m = $table->mapFromDb(['code' => 1]);
+        $this->assertSame(['code' => 1], $m);
     }
 }

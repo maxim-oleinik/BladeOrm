@@ -1,6 +1,5 @@
 <?php namespace Blade\Orm\Table\Mapper;
 
-
 /**
  * Проверочный интерфес для работы с объединением нескольких колонок
  */
@@ -23,4 +22,12 @@ interface MultiColumnMapperInterface extends MapperInterface
      */
     //public function fromDb(&$values);
 
+
+    /**
+     * Достаточно ли входных данных для вызова маппера
+     *
+     * @param array $input
+     * @return bool
+     */
+    public function isAvailableFromDb(array $input):bool;
 }

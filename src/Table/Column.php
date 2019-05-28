@@ -3,7 +3,6 @@
 use Blade\Orm\Table\Mapper\MapperInterface;
 use Blade\Orm\Table\Mapper\MultiColumnMapperInterface;
 
-
 /**
  * @see \Blade\Orm\Test\Table\ColumnTest
  */
@@ -37,9 +36,15 @@ class Column implements MapperInterface
     public function setMapper(MapperInterface $mapper)
     {
         $this->mapper = $mapper;
-        if ($mapper instanceof MultiColumnMapperInterface) {
-            $this->isComposite = true;
-        }
+        $this->isComposite = $mapper instanceof MultiColumnMapperInterface;
+    }
+
+    /**
+     * @return \Blade\Orm\Table\Mapper\MapperInterface
+     */
+    public function getMapper()
+    {
+        return $this->mapper;
     }
 
 
@@ -71,7 +76,7 @@ class Column implements MapperInterface
     {
         if ($this->isNull && !$value) {
             $value = null;
-        } else if ($this->mapper) {
+        } elseif ($this->mapper) {
             $value = $this->mapper->toDb($value);
         }
         if ($this->isNull && !$value) {
@@ -95,5 +100,4 @@ class Column implements MapperInterface
         }
         return $result;
     }
-
 }

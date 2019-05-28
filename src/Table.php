@@ -713,8 +713,7 @@ end $$
 
         // Композитные колонки в первую очередь
         if ($this->compositeColumns) {
-            foreach ($this->compositeColumns as $column) {
-                $columnName = $column->getName();
+            foreach ($this->compositeColumns as $columnName => $column) {
 
                 // Если правила нет в наборе значений
                 if (!array_key_exists($columnName, $values)) {
@@ -735,15 +734,8 @@ end $$
         }
 
         // Обычные колонки
-        if ($this->columns) {
-            foreach ($this->columns as $column) {
-                $columnName = $column->getName();
-
-                // Если правила нет в наборе значений
-                if (!array_key_exists($columnName, $values)) {
-                    continue;
-                }
-
+        if ($this->columns && ($cols = array_intersect_key($this->columns, $values))) {
+            foreach ($cols as $columnName => $column) {
                 $values[$columnName] = $column->toDb($values[$columnName]);
             }
         }
@@ -759,30 +751,30 @@ end $$
      */
     public function mapFromDb(array $values)
     {
+        if (!$values) {
+            return [];
+        }
+
         $this->_initColumns();
 
         // Обычные колонки
-        if ($this->columns) {
-            foreach ($this->columns as $column) {
-                $columnName = $column->getName();
-
-                // Если правила нет в наборе значений
-                if (!array_key_exists($columnName, $values)) {
-                    continue;
-                }
-                $value = $values[$columnName];
-                $value = $column->fromDb($value);
-                $values[$columnName] = $value;
+        if ($this->columns && ($cols = array_intersect_key($this->columns, $values))) {
+            foreach ($cols as $columnName => $column) {
+                $values[$columnName] = $column->fromDb($values[$columnName]);
             }
         }
 
         // Композитные колонки в конце
         if ($this->compositeColumns) {
-            foreach ($this->compositeColumns as $column) {
+            foreach ($this->compositeColumns as $columnName => $column) {
                 // Если правила нет в наборе значений - не проверяем, т.к. его там НЕ может быть
-
-                $value = $column->fromDb($values); // Маппер может изменить набор $values (удалить примитивные)
-                $values[$column->getName()] = $value;
+                // Но проверяем, что есть достаточно входных данных для вызова маппера
+                /** @var \Blade\Orm\Table\Mapper\MultiColumnMapperInterface $mapper */
+                $mapper = $column->getMapper();
+                if ($mapper->isAvailableFromDb($values)) {
+                    $value = $column->fromDb($values); // Маппер может изменить набор $values (удалить примитивные)
+                    $values[$columnName] = $value;
+                }
             }
         }
 
@@ -819,9 +811,9 @@ end $$
                     }
 
                     if ($column->isComposite()) {
-                        $this->compositeColumns[] = $column;
+                        $this->compositeColumns[$field] = $column;
                     } else {
-                        $this->columns[] = $column;
+                        $this->columns[$field] = $column;
                     }
                 }
             }
