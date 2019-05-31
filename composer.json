@@ -10,6 +10,7 @@
 
   "require": {
     "php": ">=7.0",
+    "ext-mbstring": "*",
     "maxim-oleinik/blade-database": "^0.2.3"
   },
   "require-dev": {
