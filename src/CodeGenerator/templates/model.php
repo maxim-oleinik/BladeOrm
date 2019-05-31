@@ -53,7 +53,7 @@ class MODEL_NAME extends \Blade\Orm\Model
 
 
     /**
-     * @var array - Сеттеры, вызываются в set(), update()
+     * @var array - Сеттеры, вызываются в конструкторе, set(), update()
      */
     protected $forceSetters = [
         'name' => 'setName', /* @see MODEL_NAME::setName() */
