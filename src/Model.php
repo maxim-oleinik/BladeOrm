@@ -376,7 +376,7 @@ class Model
 
     /**
      * SET attribute value
-     * Преобразует значения - set_mutators
+     * Преобразует значения @see transformers
      *
      * @param  string $field
      * @param  mixed  $value

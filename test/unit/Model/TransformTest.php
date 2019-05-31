@@ -7,20 +7,20 @@ class TestModelForTransformTest extends Model
 {
     protected $allowGetterMagic = true;
     protected $transformers = [
-        'col_int'           => 'int',
-        'col_trim'          => 'trim',
-        'col_float'         => 'float',
-        'col_bool'          => 'bool',
-        'col_trim_lower'    => ['trim', 'lower'],
-        'col_callable'      => [TestModelForTransformTest::class, '_set_col_callable'],
-        'col_trim_callable' => ['trim', [TestModelForTransformTest::class, '_set_col_callable']],
-        'col_trigger'       => 'trim',
-        'col_date'          => 'db_date',
-        'col_array'         => 'array',
-        'colObject'         => CustomDateTime::class,
+        'colInt'          => 'int',
+        'colTrim'         => 'trim',
+        'colFloat'        => 'float',
+        'colBool'         => 'bool',
+        'colTrimLower'    => ['trim', 'lower'],
+        'colCallable'     => [TestModelForTransformTest::class, '_set_colCallable'],
+        'colTrimCallable' => ['trim', [TestModelForTransformTest::class, '_set_colCallable']],
+        'colTrigger'      => 'trim',
+        'colDate'         => 'db_date',
+        'colArray'        => 'array',
+        'colObject'       => CustomDateTime::class,
     ];
 
-    protected static function _set_col_callable($newValue)
+    protected static function _set_colCallable($newValue)
     {
         return $newValue . '123';
     }
@@ -41,45 +41,45 @@ class CustomDateTime extends \DateTime
 class TransformTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Set Mutators
+     * Set transformers
      */
-    public function testSetMutators()
+    public function testSetTransformers()
     {
         $m = new TestModelForTransformTest([
-            'col_int' => '123',
-            'col_float' => '1.56',
-            'col_trim' => ' abc ',
-            'col_trim_lower' => ' ЭЮЯ ',
+            'colInt' => '123',
+            'colFloat' => '1.56',
+            'colTrim' => ' abc ',
+            'colTrimLower' => ' ЭЮЯ ',
         ]);
 
-        $this->assertSame(123, $m->col_int);
-        $this->assertSame(1.56, $m->col_float);
-        $this->assertSame('abc', $m->col_trim);
-        $this->assertSame('эюя', $m->col_trim_lower);
+        $this->assertSame(123, $m->colInt);
+        $this->assertSame(1.56, $m->colFloat);
+        $this->assertSame('abc', $m->colTrim);
+        $this->assertSame('эюя', $m->colTrimLower);
 
         // set
-        $m->set('col_int', '234');
-        $this->assertSame(234, $m->col_int);
+        $m->set('colInt', '234');
+        $this->assertSame(234, $m->colInt);
     }
 
 
     /**
-     * Date Mutator
+     * Date Transformer
      */
-    public function testDateMutator()
+    public function testDateTransformer()
     {
-        $m = new TestModelForTransformTest(['col_date' => $date = new DateTime('tomorrow')]);
-        $this->assertEquals($date->format('Y-m-d'), $m->col_date);
+        $m = new TestModelForTransformTest(['colDate' => $date = new DateTime('tomorrow')]);
+        $this->assertEquals($date->format('Y-m-d'), $m->colDate);
 
-        $m->set('col_date', $date = '2016-02-01');
-        $this->assertEquals($date, $m->col_date);
+        $m->set('colDate', $date = '2016-02-01');
+        $this->assertEquals($date, $m->colDate);
     }
 
 
     /**
-     * Bool Mutator
+     * Bool Transformer
      */
-    public function testBoolMutator()
+    public function testBoolTransformer()
     {
         $plan = [
             ['1',  true],
@@ -101,44 +101,44 @@ class TransformTest extends \PHPUnit_Framework_TestCase
 
         foreach ($plan as $row) {
             list($imput, $expected) = $row;
-            $m = new TestModelForTransformTest(['col_bool'=>$imput]);
-            $this->assertSame($expected, $m->col_bool, var_export($row, true));
+            $m = new TestModelForTransformTest(['colBool'=>$imput]);
+            $this->assertSame($expected, $m->colBool, var_export($row, true));
         }
     }
 
 
     /**
-     * Set Mutators - проверка ifModified
+     * Set Transformers - проверка ifModified
      * Значения трансформированные в конструкторе считаются Измененными
      */
-    public function testSetMutatorsChecksIfModified()
+    public function testSetTransformersChecksIfModified()
     {
         $m = new TestModelForTransformTest([
-            'col_trim' => ' abc ',
-            'col_int' => '123',
+            'colTrim' => ' abc ',
+            'colInt' => '123',
         ]);
-        $this->assertFalse($m->isDirty('col_int'), 'Int not modified');
-        $this->assertTrue($m->isDirty('col_trim'), 'Trim is modified');
+        $this->assertFalse($m->isDirty('colInt'), 'Int not modified');
+        $this->assertTrue($m->isDirty('colTrim'), 'Trim is modified');
 
-        $m->set('col_trim', 'abc    ');
-        $this->assertSame('abc', $m->col_trim);
+        $m->set('colTrim', 'abc    ');
+        $this->assertSame('abc', $m->colTrim);
 
-        $this->assertTrue($m->isDirty('col_trim'), 'Trim is modified');
+        $this->assertTrue($m->isDirty('colTrim'), 'Trim is modified');
     }
 
 
     /**
      * Трансформер callable
      */
-    public function testSetMutatorsCallable()
+    public function testSetTransformersCallable()
     {
         $m = new TestModelForTransformTest([
-            'col_callable' => 'val',
-            'col_trim_callable' => '  val   ',
+            'colCallable' => 'val',
+            'colTrimCallable' => '  val   ',
         ]);
 
-        $this->assertSame('val123', $m->col_callable);
-        $this->assertSame('val123', $m->col_trim_callable);
+        $this->assertSame('val123', $m->colCallable);
+        $this->assertSame('val123', $m->colTrimCallable);
     }
 
 
@@ -148,10 +148,10 @@ class TransformTest extends \PHPUnit_Framework_TestCase
     public function testNotTranformIfNull()
     {
         $m = new TestModelForTransformTest([
-            'col_trim' => null,
+            'colTrim' => null,
         ]);
 
-        $this->assertNull($m->col_trim);
+        $this->assertNull($m->colTrim);
         $this->assertSame([], $m->getValuesUpdated());
     }
 
@@ -161,12 +161,12 @@ class TransformTest extends \PHPUnit_Framework_TestCase
      */
     public function testArray()
     {
-        $m = new TestModelForTransformTest(['col_array' => null]);
-        $m->set('col_array', $val = [1,2,'abc']);
-        $this->assertSame($val, $m->col_array);
+        $m = new TestModelForTransformTest(['colArray' => null]);
+        $m->set('colArray', $val = [1,2,'abc']);
+        $this->assertSame($val, $m->colArray);
 
         $this->setExpectedException('InvalidArgumentException', 'Expected array');
-        $m->set('col_array', 'not array');
+        $m->set('colArray', 'not array');
     }
 
 
