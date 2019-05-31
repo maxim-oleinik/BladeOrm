@@ -45,14 +45,14 @@ class TransformSettersTest extends \PHPUnit_Framework_TestCase
         $m = new TransformSettersTestModel;
         $this->assertTrue($m->set('colTrimSetter', '  val  '), 'Значение было изменено');
         $this->assertSame('val123', $m->colTrimSetter, 'trim transformer + 123 with setter');
-        $this->assertTrue($m->isDirty('colTrimSetter'));
+        $this->assertTrue($m->isModified('colTrimSetter'));
 
         // Вызов через конструктор
         $m = new TransformSettersTestModel([
             'colTrimSetter' => '  val  ',
         ]);
         $this->assertSame('val123', $m->colTrimSetter, 'trim transformer + 123 with setter');
-        $this->assertTrue($m->isDirty('colTrimSetter'));
+        $this->assertTrue($m->isModified('colTrimSetter'));
     }
 
 
@@ -65,13 +65,13 @@ class TransformSettersTest extends \PHPUnit_Framework_TestCase
         $m = new TransformSettersTestModel;
         $this->assertTrue($m->set('colObjectSetter', $origValue), 'Значение было изменено');
         $this->assertEquals($origValue->modify('+1 day'), $m->colObjectSetter, 'transformer + setter');
-        $this->assertTrue($m->isDirty('colObjectSetter'));
+        $this->assertTrue($m->isModified('colObjectSetter'));
 
         // Вызов через конструктор
         $m = new TransformSettersTestModel([
             'colObjectSetter' => new DateTime,
         ]);
         $this->assertEquals(new DateTime('+1 day'), $m->colObjectSetter, 'transformer + setter');
-        $this->assertTrue($m->isDirty('colObjectSetter'));
+        $this->assertTrue($m->isModified('colObjectSetter'));
     }
 }

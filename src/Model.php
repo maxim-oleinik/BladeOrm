@@ -113,7 +113,7 @@ class Model
         // Сохранить значения
         $this->values = $values;
 
-        // Пропустить через трансформеры и сеттеры, чтобы пометить isDirty
+        // Пропустить через трансформеры и сеттеры, чтобы пометить isModified
         foreach ($values as $key => $value) {
             if ($this->forceSetters && array_key_exists($key, $this->forceSetters)) {
                 $this->_set_resolved($key, $value, false);
@@ -569,7 +569,7 @@ class Model
      * @param  string $field
      * @return bool
      */
-    public function isDirty($field)
+    public function isModified($field)
     {
         // Проверить вложенные объекты
         if ($this->has($field) && isset($this->objectSnapshots[$field])) {

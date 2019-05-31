@@ -84,9 +84,9 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['name'], array_keys($m->getValuesUpdated(['name'])));
         $this->assertEquals(['code'], array_keys($m->getValuesUpdated(['code'])));
 
-        $this->assertTrue($m->isDirty('code'));
-        $this->assertTrue($m->isDirty('name'));
-        $this->assertFalse($m->isDirty('id'));
+        $this->assertTrue($m->isModified('code'));
+        $this->assertTrue($m->isModified('name'));
+        $this->assertFalse($m->isModified('id'));
     }
 
 
@@ -101,7 +101,7 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['name' => $old], $m->getValuesOld());
         $this->assertEquals(['name' => $new], $m->getValuesUpdated());
-        $this->assertTrue($m->isDirty('name'));
+        $this->assertTrue($m->isModified('name'));
     }
 
 
@@ -116,7 +116,7 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame([], $m->getValuesOld());
         $this->assertSame([], $m->getValuesUpdated());
-        $this->assertFalse($m->isDirty('name'));
+        $this->assertFalse($m->isModified('name'));
     }
 
 
@@ -241,26 +241,26 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['col_array' => $valOld], $m->getValuesOld());
 
         $m->resetModified();
-        $this->assertFalse($m->isDirty('col_array'));
+        $this->assertFalse($m->isModified('col_array'));
         $m->set('col_array', $valNew);
-        $this->assertFalse($m->isDirty('col_array'), 'Значение не изменилось');
+        $this->assertFalse($m->isModified('col_array'), 'Значение не изменилось');
         $m->set('col_array', ['a','b','k'=>3]);
-        $this->assertTrue($m->isDirty('col_array'), 'Ключи массива учитываются');
+        $this->assertTrue($m->isModified('col_array'), 'Ключи массива учитываются');
     }
 
 
     /**
-     * isDirty
+     * isModified
      */
-    public function testIsDirty()
+    public function testisModified()
     {
         $m = new TestModelForIsModifiedTest(['code' => 123]);
-        $this->assertFalse($m->isDirty('code'));
+        $this->assertFalse($m->isModified('code'));
         $this->assertFalse($m->set('code', 123), 'Значение не изменилось');
 
         $this->assertTrue($m->set('code', 222), 'Значение изменено');
-        $this->assertTrue($m->isDirty('code'));
-        $this->assertFalse($m->isDirty('unknown'));
+        $this->assertTrue($m->isModified('code'));
+        $this->assertFalse($m->isModified('unknown'));
     }
 
 
@@ -273,7 +273,7 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $m->push('code', 222);
         $m->push('new_field', 555);
 
-        $this->assertFalse($m->isDirty('code'));
+        $this->assertFalse($m->isModified('code'));
         $this->assertSame([], $m->getValuesUpdated());
     }
 
@@ -287,14 +287,14 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $ob2 = new IsModifiedTestValueObject(2);
         $ob3 = new IsModifiedTestValueObject(3);
         $m  = new TestModelForIsModifiedTest(['ob1' => $ob1, 'ob3' => $ob3]);
-        $this->assertFalse($m->isDirty('ob1'), 'из конструктора - НЕ изменен');
+        $this->assertFalse($m->isModified('ob1'), 'из конструктора - НЕ изменен');
         $m->set('ob2', $ob2);
         $this->assertEquals(['ob2' => null], $m->getValuesOld(), 'Предыдущего значения не было');
 
         // Меняем внутреннее состояние 1 объекта
         $ob1->setId(11);
         $m->set('ob1', $ob1); // принудительно уведомляем родителя
-        $this->assertTrue($m->isDirty('ob1'));
+        $this->assertTrue($m->isModified('ob1'));
         $this->assertEquals([
             'ob1' => 'id:1', // Снапшот
             'ob2' => null,
@@ -310,7 +310,7 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
 
         // Изменяем объект после очистки
         $ob2->setId(22); // Не уведомляем родителя
-        $this->assertTrue($m->isDirty('ob2'), 'родитель уже в курсе');
+        $this->assertTrue($m->isModified('ob2'), 'родитель уже в курсе');
         $this->assertEquals([
             'ob2' => 'id:2', // Предыдущий снапшот
         ], $m->getValuesOld(), 'В старых значениях хранится снапшот объекта');
@@ -318,19 +318,19 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         // Возвращаем к предыдущему значению не сохраняя
         $ob2->setId(2);
         $m->set('ob2', $ob2); // уведомляем
-        $this->assertFalse($m->isDirty('ob2'));
+        $this->assertFalse($m->isModified('ob2'));
         $this->assertEquals([], $m->getValuesOld(), 'Значение не изменилось');
         $this->assertEquals([], $m->getValuesUpdated(), 'Значение не изменилось');
 
         // Обнулить
         $m->set('ob1', null);
-        $this->assertTrue($m->isDirty('ob1'));
+        $this->assertTrue($m->isModified('ob1'));
         $this->assertEquals(['ob1' => 'id:11'], $m->getValuesOld(), 'Старое значение');
         $this->assertEquals(['ob1' => null], $m->getValuesUpdated());
 
         // Меняем внутреннее состояние 3 объекта (запрещенного к прямому сету)
         $ob3->setId(33);
-        $this->assertTrue($m->isDirty('ob3'));
+        $this->assertTrue($m->isModified('ob3'));
     }
 
 
@@ -343,6 +343,6 @@ class IsModifiedTest extends \PHPUnit_Framework_TestCase
         $m  = new TestModelForIsModifiedTest(['ob' => $ob]);
 
         $ob->setId(11);
-        $this->assertEquals(['ob'=>$ob], $m->getValuesUpdated(), 'Родитель в курсе, что значение изменилось не вызывая isDirty до этого');
+        $this->assertEquals(['ob'=>$ob], $m->getValuesUpdated(), 'Родитель в курсе, что значение изменилось не вызывая isModified до этого');
     }
 }

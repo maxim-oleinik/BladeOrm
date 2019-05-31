@@ -117,13 +117,13 @@ class TransformTest extends \PHPUnit_Framework_TestCase
             'colTrim' => ' abc ',
             'colInt' => '123',
         ]);
-        $this->assertFalse($m->isDirty('colInt'), 'Int not modified');
-        $this->assertTrue($m->isDirty('colTrim'), 'Trim is modified');
+        $this->assertFalse($m->isModified('colInt'), 'Int not modified');
+        $this->assertTrue($m->isModified('colTrim'), 'Trim is modified');
 
         $m->set('colTrim', 'abc    ');
         $this->assertSame('abc', $m->colTrim);
 
-        $this->assertTrue($m->isDirty('colTrim'), 'Trim is modified');
+        $this->assertTrue($m->isModified('colTrim'), 'Trim is modified');
     }
 
 
@@ -178,14 +178,14 @@ class TransformTest extends \PHPUnit_Framework_TestCase
         $m = new TestModelForTransformTest(['colObject' => null]);
         $m->set('colObject', $val = new CustomDateTime('-1 day'));
         $this->assertSame($val, $m->colObject);
-        $this->assertTrue($m->isDirty('colObject'));
+        $this->assertTrue($m->isModified('colObject'));
 
         // Установка из констуруктора
         $m = new TestModelForTransformTest(['colObject' => new CustomDateTime()]);
-        $this->assertFalse($m->isDirty('colObject'), 'после всех преобразований - не измен');
+        $this->assertFalse($m->isModified('colObject'), 'после всех преобразований - не измен');
         $m->set('colObject', null);
         $this->assertNull($m->colObject);
-        $this->assertTrue($m->isDirty('colObject'));
+        $this->assertTrue($m->isModified('colObject'));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('CustomDateTime for field');
