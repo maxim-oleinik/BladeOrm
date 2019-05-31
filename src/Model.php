@@ -88,19 +88,6 @@ class Model
      */
     protected $transformers = [];
 
-    /**
-     * callable-триггеры, которые вызываются при изменении какого-то поля
-     * Назначение - изменить зависимые поля объекта при изменении выбранного поля.
-     * Вызывается ДО сохранения. Это только подготовка объекта к сохранению.
-     *
-     * @deprecated
-     *
-     * @var array
-     *   'field' => callable ($object, $key, $newValue, $oldValue)
-     * @see Model::set
-     */
-    protected $updateTriggers = [];
-
 
     /**
      * Конструктор
@@ -342,10 +329,6 @@ class Model
         if (((null === $newValue || null === $oldValue) && $oldValue !== $newValue) || $strOldValue !== $strNewValue) {
             $this->modifiedValuesOld[$field] = $oldValue;
             $this->modifiedValuesNew[$field] = $newValue;
-
-            if ( !empty($this->updateTriggers[$field])) {
-                $this->updateTriggers[$field]($this, $field, $newValue, $oldValue);
-            }
             return true;
 
         } else {
