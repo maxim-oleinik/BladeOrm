@@ -29,7 +29,7 @@ class TestModelForForceSettersGettersTest extends Model
 /**
  * @see \Blade\Orm\Model
  */
-class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
+class ForceSettersGettersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * ForceGetter
@@ -52,7 +52,8 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetterExceptionOnMagic()
     {
         $m = new TestModelForForceSettersGettersTest(['code' => 55]);
-        $this->setExpectedException('InvalidArgumentException', 'Forbidden! Use getter');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Forbidden! Use getter');
         $m->code;
     }
 
@@ -62,7 +63,8 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetterExceptionOnMethod()
     {
         $m = new TestModelForForceSettersGettersTest(['code' => 55]);
-        $this->setExpectedException('InvalidArgumentException', 'Forbidden! Use getter');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Forbidden! Use getter');
         $m->get('code');
     }
 
@@ -108,7 +110,8 @@ class ForceSettersGettersTest extends \PHPUnit_Framework_TestCase
     public function testSetterExceptionOnForbidden()
     {
         $m = new TestModelForForceSettersGettersTest(['hidden_field' => 'aaa']);
-        $this->setExpectedException(\RuntimeException::class, 'forbidden');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('forbidden');
         $m->set('hidden_field', 'new value');
     }
 }

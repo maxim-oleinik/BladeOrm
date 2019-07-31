@@ -28,7 +28,7 @@ class BaseTableSaveEventLogger {
 /**
  * @see Table
  */
-class TableSaveTest extends \PHPUnit_Framework_TestCase
+class TableSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Table

@@ -3,7 +3,7 @@
 use Blade\Orm\Table\Mapper\MapperInterface;
 
 
-abstract class BaseMapperTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseMapperTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param \Blade\Orm\Table\Mapper\MapperInterface $mapper

@@ -7,7 +7,7 @@ use Blade\Database\Connection\TestStubDbConnection;
 /**
  * @see \Blade\Orm\Table
  */
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Название таблицы в toString

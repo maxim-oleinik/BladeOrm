@@ -14,7 +14,7 @@ class TableFactoryTestTable extends Table { protected $tableName = 't1'; }
 /**
  * @see \Blade\Orm\Table\TableFactory
  */
-class TableFactoryTest extends \PHPUnit_Framework_TestCase
+class TableFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TableFactory

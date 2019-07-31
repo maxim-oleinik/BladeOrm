@@ -15,7 +15,7 @@ class CacheDecoratorTestTable extends Table
 /**
  * @see CacheDecoratorTable
  */
-class CacheDecoratorTableTest extends \PHPUnit_Framework_TestCase
+class CacheDecoratorTableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return array

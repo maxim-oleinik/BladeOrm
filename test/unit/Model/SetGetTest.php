@@ -10,7 +10,7 @@ class TestModelForSetGetTest extends Model
 /**
  * @see Model
  */
-class SetGetTest extends \PHPUnit_Framework_TestCase
+class SetGetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Создать и получить поля

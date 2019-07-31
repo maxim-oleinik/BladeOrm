@@ -18,7 +18,7 @@ class TablesRepositoryTestTable2 extends Table { protected $tableName = 't2'; }
 /**
  * @see \Blade\Orm\Table\TablesRepository
  */
-class TablesRepositoryTest extends \PHPUnit_Framework_TestCase
+class TablesRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TableFactory

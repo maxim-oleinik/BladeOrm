@@ -38,7 +38,7 @@ class CustomDateTime extends \DateTime
 /**
  * @see Model
  */
-class TransformTest extends \PHPUnit_Framework_TestCase
+class TransformTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Set transformers
@@ -165,7 +165,8 @@ class TransformTest extends \PHPUnit_Framework_TestCase
         $m->set('colArray', $val = [1,2,'abc']);
         $this->assertSame($val, $m->colArray);
 
-        $this->setExpectedException('InvalidArgumentException', 'Expected array');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Expected array');
         $m->set('colArray', 'not array');
     }
 

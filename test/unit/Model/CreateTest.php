@@ -18,7 +18,7 @@ class CreateTestModel extends Model
 /**
  * @see \Blade\Orm\Model
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Создание новой модели с дефолтными значениями

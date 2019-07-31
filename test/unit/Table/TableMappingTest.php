@@ -89,7 +89,7 @@ class TestMultiColumnMapper implements \Blade\Orm\Table\Mapper\MultiColumnMapper
 /**
  * @see Table
  */
-class TableMappingTest extends \PHPUnit_Framework_TestCase
+class TableMappingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get Mapper

@@ -23,7 +23,7 @@ class BaseQueryTestQuery extends Query
 /**
  * @see Query
  */
-class BaseQueryTest extends \PHPUnit_Framework_TestCase
+class BaseQueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BaseQueryTestTable

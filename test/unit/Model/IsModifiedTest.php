@@ -37,7 +37,7 @@ class IsModifiedTestValueObject
 /**
  * @see Model
  */
-class IsModifiedTest extends \PHPUnit_Framework_TestCase
+class IsModifiedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Проверка - были изменения или нет

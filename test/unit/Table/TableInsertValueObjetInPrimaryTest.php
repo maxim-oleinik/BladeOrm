@@ -34,7 +34,7 @@ class ThisTestTable extends Table
 /**
  * @see Table
  */
-class TableInsertValueObjetInPrimaryTest extends \PHPUnit_Framework_TestCase
+class TableInsertValueObjetInPrimaryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * тест вставки в бд модели, у которой первичный ключ value-object

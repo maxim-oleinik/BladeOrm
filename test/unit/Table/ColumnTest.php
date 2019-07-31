@@ -7,7 +7,7 @@ use Blade\Orm\Table\Mapper\MapperInterface;
 /**
  * @see \Blade\Orm\Table\Column
  */
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Маппер не указан

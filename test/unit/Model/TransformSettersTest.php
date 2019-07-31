@@ -35,7 +35,7 @@ class TransformSettersTestModel extends Model
  *
  * @see Model
  */
-class TransformSettersTest extends \PHPUnit_Framework_TestCase
+class TransformSettersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Одноверменный вызов трансформера и сеттера
