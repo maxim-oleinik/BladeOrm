@@ -70,10 +70,11 @@ class Model
      * Можно указывать несколько обработчиков или callable.
      *
      * @var array
+     *   'field' => 'null',
      *   'field' => 'int',
      *   'field' => 'float',
      *   'field' => 'trim',
-     *   'field' => ['trim', 'lower'],
+     *   'field' => ['trim', 'lower', 'null'],
      *   'field' => ['ThisModelClass', '_set_col_callable'],
      *   'field' => ['trim', ['ThisModelClass', '_set_col_callable']],
      *   'field' => [\DateTime::class], // Может принимать значения только указанного класса
@@ -370,6 +371,10 @@ class Model
             foreach ($types as $type) {
                 switch ($type) {
 
+                    case 'null':
+                        $hasNull = true;
+                        break;
+
                     case 'trim':
                         $value = trim($value);
                         break;
@@ -433,6 +438,10 @@ class Model
                         break;
                 }
 
+            }
+
+            if (!empty($hasNull) && !$value) {
+                $value = null;
             }
         }
 

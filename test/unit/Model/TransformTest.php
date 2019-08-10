@@ -7,6 +7,9 @@ class TestModelForTransformTest extends Model
 {
     protected $allowGetterMagic = true;
     protected $transformers = [
+        'colNull'         => 'null',
+        'colNullInt'      => ['int', 'null'],
+        'colNullString'   => ['trim', 'lower', 'null'],
         'colInt'          => 'int',
         'colTrim'         => 'trim',
         'colFloat'        => 'float',
@@ -198,5 +201,39 @@ class TransformTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('CustomDateTime for field');
         new TestModelForTransformTest(['colObject' => 'not date']);
+    }
+
+
+    /**
+     * Null Transformer
+     */
+    public function testNullTransformer()
+    {
+        $plan = [
+            'colNull' => [
+                ['1', '1'],
+                ['0', null],
+                ['', null],
+                [false, null],
+                [true, true],
+            ],
+            'colNullInt'      => [
+                ['1', 1],
+                ['0', null],
+                ['abc', null],
+                ['1a', 1],
+            ],
+            'colNullString' => [
+                ['', null],
+                [' ABC ', 'abc'],
+            ],
+        ];
+
+        foreach ($plan as $col => $data) {
+            foreach ($data as list($input, $expected)) {
+                $m = new TestModelForTransformTest([$col => $input]);
+                $this->assertSame($expected, $m->get($col), $col . ': ' . var_export("{$input} - {$expected}", true));
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ class MODEL_NAME extends \Blade\Orm\Model
      * @var array - Трансформеры
      */
     protected $transformers = [
+        'field13' => 'null',
         'field1'  => 'trim',
         'field2'  => 'lower',
         'field21' => 'upper',
@@ -20,7 +21,7 @@ class MODEL_NAME extends \Blade\Orm\Model
         'field5'  => 'float',
         'field7'  => 'bool',
         'field8'  => 'array',
-        'field9'  => ['trim', 'lower'], // несколько трансформеров
+        'field9'  => ['trim', 'lower', 'null'], // несколько трансформеров
         'field10' => ['SomeClass', 'someMethod'], // callable
         'field11' => ['trim', ['SomeClass', 'someMethod']], // trim + callable
 
