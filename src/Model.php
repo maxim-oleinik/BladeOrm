@@ -40,13 +40,6 @@ class Model
     // ------------------------------------------------------------------------
 
     /**
-     * @var array - Значения по умолчанию для создания нового объекта
-     * @deprecated
-     * @see defaults()
-     */
-    protected $defaults = [];
-
-    /**
      * @var bool - Разрешить "магический" доступ к геттерам
      */
     protected $allowGetterMagic = false;
@@ -133,7 +126,7 @@ class Model
      */
     public function defaults(): array
     {
-        return $this->defaults;
+        return [];
     }
 
 
