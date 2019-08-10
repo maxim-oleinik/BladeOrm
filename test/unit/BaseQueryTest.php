@@ -1,6 +1,7 @@
 <?php namespace Blade\Orm\Test;
 
 use Blade\Database\DbAdapter;
+use Blade\Orm\Model;
 use Blade\Orm\Query;
 use Blade\Orm\Table;
 use Blade\Database\Connection\TestStubDbConnection;
@@ -111,5 +112,37 @@ class BaseQueryTest extends \PHPUnit\Framework\TestCase
         $filters = ['filter' => 'val'];
         $sql = $this->table->sql()->filterBy($filters);
         $this->assertEquals($q = "SELECT *\nFROM table AS t\nWHERE t.filter='val'", (string)$sql);
+    }
+
+
+    /**
+     * Each
+     */
+    public function testEach()
+    {
+        $this->conn->returnValues = [
+            [$r1 = ['id'=>44], $r2 = ['id'=>55]],
+            [$r1 = ['id'=>44], $r2 = ['id'=>55]],
+            [$r1 = ['id'=>44], $r2 = ['id'=>55]],
+        ];
+
+        $result = [];
+        foreach ($this->table->sql()->fetchEach() as $row) {
+            $result[] = $row;
+        }
+        $this->assertEquals([$r1, $r2], $result);
+
+        $result = [];
+        foreach ($this->table->sql()->fetchEachModel() as $model) {
+            $result[] = $model;
+        }
+        $this->assertEquals([new Model($r1, false), new Model($r2, false)], $result);
+
+        // Table
+        $result = [];
+        foreach ($this->table->each('SELECT * FROM ...') as $model) {
+            $result[] = $model;
+        }
+        $this->assertEquals([new Model($r1, false), new Model($r2, false)], $result);
     }
 }

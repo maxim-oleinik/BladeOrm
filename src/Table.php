@@ -277,8 +277,7 @@ abstract class Table
     {
         $result = [];
 
-        $rows = $this->getAdapter()->selectAll($sql);
-        foreach ($rows as $row) {
+        foreach ($this->getAdapter()->each($sql) as $row) {
             /** @var Model $item */
             $item = $this->makeModel((array)$row);
             if ($indexBy) {
@@ -318,13 +317,12 @@ abstract class Table
     /**
      * Найти запись по первичному ключу
      *
-     * @param  int  $id
-     * @param  bool $exception
+     * @param string $id
+     * @param bool   $exception
      * @return false|Model
      */
     public function findOneByPk($id, $exception = true)
     {
-        $id = (string)$id;
         if ($id) {
             return CacheRepository::item($this->getTableName(), $id, function () use ($id, $exception) {
                 $sql = $this->sql(get_class($this).'::findOneByPk')->filterByPk($id);
@@ -333,7 +331,7 @@ abstract class Table
         }
 
         if ($exception) {
-            throw new \InvalidArgumentException(get_class($this).'::'.__FUNCTION__.": ID is not given");
+            throw new \InvalidArgumentException(get_class($this).'::'.__FUNCTION__. ': ID is not given');
         }
 
         return false;
@@ -466,6 +464,22 @@ abstract class Table
                 $handler($models);
             }
         });
+    }
+
+
+    /**
+     * Построчная выборка
+     *
+     * @param  string|SqlBuilder $query
+     * @return \Generator|Model[]
+     */
+    public function each($query): \Generator
+    {
+        foreach ($this->getAdapter()->each($query) as $row) {
+            /** @var Model $item */
+            $item = $this->makeModel((array)$row);
+            yield $item;
+        }
     }
 
 

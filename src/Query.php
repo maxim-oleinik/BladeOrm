@@ -146,6 +146,16 @@ class Query extends \Blade\Database\Sql\SqlBuilder
         return $this->finder->findOne($this, $exception);
     }
 
+    /**
+     * Построчная выборка Моделей
+     *
+     * @return \Generator|Model[]
+     */
+    public function fetchEachModel(): \Generator
+    {
+        return $this->finder->each($this);
+    }
+
 
     /**
      * @return array - Всю выборку, для SELECT * FROM ...
@@ -185,6 +195,16 @@ class Query extends \Blade\Database\Sql\SqlBuilder
     public function fetchValue()
     {
         return $this->finder->getAdapter()->selectValue($this);
+    }
+
+    /**
+     * Построчная выборка записей
+     *
+     * @return \Generator|array[]
+     */
+    public function fetchEach()
+    {
+        return $this->finder->getAdapter()->each($this);
     }
 
     /**

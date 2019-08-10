@@ -3,6 +3,7 @@
 /**
  * @method \MODEL_NAMESPACE\MODEL_NAME   fetchModel($exception = false)
  * @method \MODEL_NAMESPACE\MODEL_NAME[] fetchModelsList($indexBy = null)
+ * @method \MODEL_NAMESPACE\MODEL_NAME[] fetchEachModel()
  * @method \TABLE_NAMESPACE\TABLE_NAME   getTable()
  */
 class QUERY_NAME extends \Blade\Orm\Query
