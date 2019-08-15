@@ -5,7 +5,6 @@ use Blade\Orm\Value\DateTimeNull;
 
 require_once __DIR__ . '/BaseMapperTestCase.php';
 
-
 /**
  * @see \Blade\Orm\Table\Mapper\DatetimeMapper
  */
@@ -20,18 +19,18 @@ class DatetimeMapperTest extends BaseMapperTestCase
 
         // Запись в Базу
         $planWrite = [
-            [$date = new \DateTime, $date->format('Y-m-d H:i:s')],
+            [$date = new \DateTime('today 12:11:10.123456'), $date->format('Y-m-d H:i:s')],
             [null, null],
         ];
 
         // Чтение из базы
         $planRead = [
-            [null,   new DateTimeNull],
-            [$date->format('Y-m-d H:i:s'), $date],
+            [null,   DateTimeNull::make()],
+            [$date->format('Y-m-d H:i:s.u'), $date], // с микросекундами
+            [$date->format('Y-m-d H:i:s'),   new \DateTime('today 12:11:10.000000')], // без микросекунд
         ];
 
         $this->_test_write_values($mapper, $planWrite);
         $this->_test_read_values($mapper, $planRead, $strict = false);
     }
-
 }

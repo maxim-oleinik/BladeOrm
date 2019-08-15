@@ -3,7 +3,6 @@
 use Blade\Orm\Value\DateTime;
 use Blade\Orm\Value\DateTimeNull;
 
-
 /**
  * @see \Blade\Orm\Test\Table\Mapper\DatetimeMapperTest
  */
@@ -17,14 +16,15 @@ class DatetimeMapper implements MapperInterface
     {
         if (!$value) {
             return null;
-
-        } elseif (!$value instanceof \DateTime) {
-            throw new \InvalidArgumentException(get_class($this) . '::' . __FUNCTION__ . ": Expected DateTime");
-
-        } else {
-            return $value->format('Y-m-d H:i:s');
         }
+
+        if (!$value instanceof \DateTime) {
+            throw new \InvalidArgumentException(get_class($this) . '::' . __FUNCTION__ . ": Expected DateTime");
+        }
+
+        return $value->format('Y-m-d H:i:s');
     }
+
 
     /**
      * @param  string $value
@@ -33,11 +33,9 @@ class DatetimeMapper implements MapperInterface
     public function fromDb(&$value)
     {
         if (null === $value) {
-            return new DateTimeNull;
-
-        } else {
-            return new DateTime($value);
+            return DateTimeNull::make();
         }
-    }
 
+        return new DateTime($value);
+    }
 }

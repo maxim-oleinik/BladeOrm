@@ -71,7 +71,8 @@ class TransformSettersTest extends \PHPUnit\Framework\TestCase
         $m = new TransformSettersTestModel([
             'colObjectSetter' => new DateTime,
         ]);
-        $this->assertEquals(new DateTime('+1 day'), $m->colObjectSetter, 'transformer + setter');
+        $this->assertInstanceOf(DateTime::class, $m->colObjectSetter);
+        $this->assertEquals(date_create('+1 day')->format(DATE_ISO8601), $m->colObjectSetter->format(DATE_ISO8601), 'transformer + setter');
         $this->assertTrue($m->isModified('colObjectSetter'));
     }
 }
