@@ -208,9 +208,10 @@ class Model
     /**
      * Вернуть массив всех значений
      *
+     * @param  bool $recursive
      * @return array
      */
-    public function toArray()
+    public function toArray($recursive = false): array
     {
         $result = $this->values;
 
@@ -219,6 +220,15 @@ class Model
             foreach ($this->forceGetters as $key => $method) {
                 if ($this->has($key)) {
                     $result[$key] = $this->_get_resolved($key);
+                }
+            }
+        }
+
+        // Пройтись по всем вложенным объектам
+        if ($recursive) {
+            foreach (array_keys($this->objectSnapshots) as $key) {
+                if (!empty($result[$key]) && $result[$key] instanceof Model) {
+                    $result[$key] = $result[$key]->toArray();
                 }
             }
         }

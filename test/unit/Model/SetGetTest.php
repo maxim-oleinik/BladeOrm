@@ -1,10 +1,16 @@
 <?php namespace Blade\Orm\Test\Model;
 
 use Blade\Orm\Model;
+use Blade\Orm\Value\DateTime;
 
 class TestModelForSetGetTest extends Model
 {
     public $allowGetterMagic = true;
+
+    public function __toString()
+    {
+        return ''; // заглушка
+    }
 }
 
 /**
@@ -35,6 +41,31 @@ class SetGetTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(isset($m->unknown));
 
         $this->assertEquals($input, $m->toArray());
+    }
+
+
+    /**
+     * toArray() - вложенные объекты
+     */
+    public function testToArrayModels()
+    {
+        $m = new TestModelForSetGetTest([
+            'id'    => 1,
+            'date'  => $date = new DateTime(),
+            'model' => new TestModelForSetGetTest([
+                'id'   => 2,
+                'code' => 'code',
+            ]),
+        ]);
+
+        $this->assertEquals([
+            'id'    => 1,
+            'date'  => $date,
+            'model' => [
+                'id'   => 2,
+                'code' => 'code',
+            ],
+        ], $m->toArray(true));
     }
 
 
